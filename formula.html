@@ -39,82 +39,84 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="exampleInputEmail1">首付比例(downPaymentRate)</label>
-                    <input type="email" class="form-control" id="downPaymentRate" placeholder="downPaymentRate" value=0 >
+                    <input type="email" class="form-control" id="downPaymentRate" placeholder="downPaymentRate" value=0>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="exampleInputEmail1">净车价(vechilePrice)</label>
-                    <input type="email" class="form-control" id="vechilePrice" placeholder="vechilePrice" value=0 >
+                    <input type="email" class="form-control" id="vechilePrice" placeholder="vechilePrice" value=0>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="exampleInputEmail1">贷款额度(totalAmount)</label>
-                    <input type="email" class="form-control" id="totalAmount" placeholder="totalAmount" value=0 >
+                    <input type="email" class="form-control" id="totalAmount" placeholder="totalAmount" value=0>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="exampleInputEmail1">保险金额(bindingInsurancePrice)</label>
                     <input type="email" class="form-control" id="bindingInsurancePrice"
-                        placeholder="bindingInsurancePrice" value=0 >
+                        placeholder="bindingInsurancePrice" value=0>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="exampleInputEmail1">贴息金额(discountAmount)</label>
-                    <input type="email" class="form-control" id="discountAmount" placeholder="discountAmount" value=0 >
+                    <input type="email" class="form-control" id="discountAmount" placeholder="discountAmount" value=0>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="exampleInputEmail1">尾款比例(remainingMoneyRate)</label>
-                    <input type="email" class="form-control" id="remainingMoneyRate" placeholder="remainingMoneyRate" value=0 >
+                    <input type="email" class="form-control" id="remainingMoneyRate" placeholder="remainingMoneyRate"
+                        value=0>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="exampleInputEmail1">期数(terms)</label>
-                    <input type="email" class="form-control" id="terms" placeholder="terms" value=0 >
+                    <input type="email" class="form-control" id="terms" placeholder="terms" value=0>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="exampleInputEmail1">费率值(rate)</label>
-                    <input type="email" class="form-control" id="rate" placeholder="rate" value=0 >
+                    <input type="email" class="form-control" id="rate" placeholder="rate" value=0>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="exampleInputEmail1">按费率贴息率(discountRate)</label>
-                    <input type="email" class="form-control" id="discountRate" placeholder="discountRate" value=0 >
+                    <input type="email" class="form-control" id="discountRate" placeholder="discountRate" value=0>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="exampleInputEmail1">利率值(interestRate)</label>
-                    <input type="email" class="form-control" id="interestRate" placeholder="interestRate" value=0 >
+                    <input type="email" class="form-control" id="interestRate" placeholder="interestRate" value=0>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="exampleInputEmail1">按利率贴息率(discountInterestRate)</label>
                     <input type="email" class="form-control" id="discountInterestRate"
-                        placeholder="discountInterestRate" value=0 >
+                        placeholder="discountInterestRate" value=0>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="exampleInputEmail1">净车价极值(minimalPriceOfVehicle)</label>
                     <input type="email" class="form-control" id="minimalPriceOfVehicle"
-                        placeholder="minimalPriceOfVehicle" value=0 >
+                        placeholder="minimalPriceOfVehicle" value=0>
                 </div>
             </div>
         </div>
         <button type="button" id="myButton" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off">
             Calculation
         </button>
+        <p id="jieguo" style="margin-top:10px;">结果</p>
     </div>
 
     <!-- <div style="width: 100%;height: 100px; position: relative;" id="div">
@@ -135,40 +137,45 @@
 
 
     <script>
-        $('#myButton').on('click', function () {
-            var $btn = $(this).button('Calculation ...'),data={};
-            $btn.button('reset');
-            // 首付比例(downPaymentRate)
-            data.downPaymentRate = $('#downPaymentRate').val()*1;
-            // 净车价(vechilePrice)
-            data.vechilePrice = $('#vechilePrice').val()*1;
-            // 贷款额度(totalAmount)
-            data.totalAmount = $('#totalAmount').val()*1;
-            // 保险金额(bindingInsurancePrice)
-            data.bindingInsurancePrice = $('#bindingInsurancePrice').val()*1;
-            // 贴息金额(discountAmount)
-            data.discountAmount = $('#discountAmount').val()*1;
-            // 尾款比例(remainingMoneyRate)
-            data.remainingMoneyRate = $('#remainingMoneyRate').val()*1;
-            // 期数(terms)
-            data.terms = $('#terms').val()*1;
-            // 费率值(rate)
-            data.rate = $('#rate').val()*1;
-            // 按费率贴息率(discountRate)
-            data.discountRate = $('#discountRate').val()*1;
-            // 利率值(interestRate)
-            data.interestRate = $('#interestRate').val()*1;
-            // 按利率贴息率(discountInterestRate)
-            data.discountInterestRate = $('#discountInterestRate').val()*1;
-            // 净车价极值(minimalPriceOfVehicle)
-            data.minimalPriceOfVehicle = $('#minimalPriceOfVehicle').val()*1;
-            console.log(data);
-            let formula = $('#gongshi').val();
-            var fun = new Function('data','return '+formula);
 
-            
-            console.log(fun(data));
+        $('#myButton').on('click', function () {
+            try {
+                var $btn = $(this).button('Calculation ...'), data = {};
+                $btn.button('reset');
+                // 首付比例(downPaymentRate)
+                data.downPaymentRate = $('#downPaymentRate').val() * 1;
+                // 净车价(vechilePrice)
+                data.vechilePrice = $('#vechilePrice').val() * 1;
+                // 贷款额度(totalAmount)
+                data.totalAmount = $('#totalAmount').val() * 1;
+                // 保险金额(bindingInsurancePrice)
+                data.bindingInsurancePrice = $('#bindingInsurancePrice').val() * 1;
+                // 贴息金额(discountAmount)
+                data.discountAmount = $('#discountAmount').val() * 1;
+                // 尾款比例(remainingMoneyRate)
+                data.remainingMoneyRate = $('#remainingMoneyRate').val() * 1;
+                // 期数(terms)
+                data.terms = $('#terms').val() * 1;
+                // 费率值(rate)
+                data.rate = $('#rate').val() * 1;
+                // 按费率贴息率(discountRate)
+                data.discountRate = $('#discountRate').val() * 1;
+                // 利率值(interestRate)
+                data.interestRate = $('#interestRate').val() * 1;
+                // 按利率贴息率(discountInterestRate)
+                data.discountInterestRate = $('#discountInterestRate').val() * 1;
+                // 净车价极值(minimalPriceOfVehicle)
+                data.minimalPriceOfVehicle = $('#minimalPriceOfVehicle').val() * 1;
+                
+                let formula = $('#gongshi').val();
+                var fun = new Function('data', 'return ' + formula);
+                document.getElementById('jieguo').innerHTML = fun(data);
+            }
+            catch (err) {
+                document.getElementById('jieguo').innerHTML = err;
+            }
         })
+
 
         // console.log(0 - (Math.pow(2, 5)))
         // let dom = document.getElementById('dom')
