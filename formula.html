@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" id="body">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>formula-1.0.0-测试</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <style>
+        #dom {
+            width: 100px;
+            height: 100px;
+            background-color: #000;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+        }
+
+        #t {
+            width: 0px;
+            height: 100px;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            background-color: #f00;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="width: 800px;margin:30px auto 0;">
+        <div class="form-group">
+            <label for="exampleInputEmail1">公式</label>
+            <textarea class="form-control" id="gongshi" rows="5"></textarea>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">首付比例(downPaymentRate)</label>
+                    <input type="email" class="form-control" id="downPaymentRate" placeholder="downPaymentRate" value=0 >
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">净车价(vechilePrice)</label>
+                    <input type="email" class="form-control" id="vechilePrice" placeholder="vechilePrice" value=0 >
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">贷款额度(totalAmount)</label>
+                    <input type="email" class="form-control" id="totalAmount" placeholder="totalAmount" value=0 >
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">保险金额(bindingInsurancePrice)</label>
+                    <input type="email" class="form-control" id="bindingInsurancePrice"
+                        placeholder="bindingInsurancePrice" value=0 >
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">贴息金额(discountAmount)</label>
+                    <input type="email" class="form-control" id="discountAmount" placeholder="discountAmount" value=0 >
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">尾款比例(remainingMoneyRate)</label>
+                    <input type="email" class="form-control" id="remainingMoneyRate" placeholder="remainingMoneyRate" value=0 >
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">期数(terms)</label>
+                    <input type="email" class="form-control" id="terms" placeholder="terms" value=0 >
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">费率值(rate)</label>
+                    <input type="email" class="form-control" id="rate" placeholder="rate" value=0 >
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">按费率贴息率(discountRate)</label>
+                    <input type="email" class="form-control" id="discountRate" placeholder="discountRate" value=0 >
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">利率值(interestRate)</label>
+                    <input type="email" class="form-control" id="interestRate" placeholder="interestRate" value=0 >
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">按利率贴息率(discountInterestRate)</label>
+                    <input type="email" class="form-control" id="discountInterestRate"
+                        placeholder="discountInterestRate" value=0 >
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">净车价极值(minimalPriceOfVehicle)</label>
+                    <input type="email" class="form-control" id="minimalPriceOfVehicle"
+                        placeholder="minimalPriceOfVehicle" value=0 >
+                </div>
+            </div>
+        </div>
+        <button type="button" id="myButton" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off">
+            Calculation
+        </button>
+    </div>
+
+    <!-- <div style="width: 100%;height: 100px; position: relative;" id="div">
+        <div id="t"></div>
+        <div id="dom">
+
+        </div>
+    </div> -->
+
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
+
+    <script>
+        $('#myButton').on('click', function () {
+            var $btn = $(this).button('Calculation ...'),data={};
+            $btn.button('reset');
+            // 首付比例(downPaymentRate)
+            data.downPaymentRate = $('#downPaymentRate').val()*1;
+            // 净车价(vechilePrice)
+            data.vechilePrice = $('#vechilePrice').val()*1;
+            // 贷款额度(totalAmount)
+            data.totalAmount = $('#totalAmount').val()*1;
+            // 保险金额(bindingInsurancePrice)
+            data.bindingInsurancePrice = $('#bindingInsurancePrice').val()*1;
+            // 贴息金额(discountAmount)
+            data.discountAmount = $('#discountAmount').val()*1;
+            // 尾款比例(remainingMoneyRate)
+            data.remainingMoneyRate = $('#remainingMoneyRate').val()*1;
+            // 期数(terms)
+            data.terms = $('#terms').val()*1;
+            // 费率值(rate)
+            data.rate = $('#rate').val()*1;
+            // 按费率贴息率(discountRate)
+            data.discountRate = $('#discountRate').val()*1;
+            // 利率值(interestRate)
+            data.interestRate = $('#interestRate').val()*1;
+            // 按利率贴息率(discountInterestRate)
+            data.discountInterestRate = $('#discountInterestRate').val()*1;
+            // 净车价极值(minimalPriceOfVehicle)
+            data.minimalPriceOfVehicle = $('#minimalPriceOfVehicle').val()*1;
+            console.log(data);
+            let formula = $('#gongshi').val();
+            var fun = new Function('data','return '+formula);
+
+            
+            console.log(fun(data));
+        })
+
+        // console.log(0 - (Math.pow(2, 5)))
+        // let dom = document.getElementById('dom')
+        //     , data = false;
+        // dom.onmousedown = function (e) {
+        //     data = true;
+        // }
+        // document.getElementById('body').onmouseup = function () {
+        //     data = false;
+        // }
+        // document.getElementById('body').onmousemove = function (even) {
+        //     if (data) {
+        //         // console.log(even.clientX);
+        //         // dom.style.top = even.clientY+'px';
+        //         let d = even.clientX/document.getElementById('div').offsetWidth;
+        //         console.log((d*100).toFixed(2)+'%')
+        //         dom.style.left = even.clientX + 'px';
+        //         document.getElementById('t').style.width = even.clientX + 'px';
+        //     }
+        // }
+    </script>
+</body>
+
+</html>
