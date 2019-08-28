@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+    <style>
+        html,
+        body {
+            margin: 0px;
+            padding: 0px;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        div {
+            background-color: #f3f3f3;
+            height: 24px;
+            margin: 0px 0px 12px 0px;
+        }
+
+        body>div:first-child {
+            height: 300px;
+        }
+
+        section {
+            padding: 0px 12px;
+        }
+
+        div {
+            animation: mymove 2.5s infinite;
+        }
+
+        @keyframes mymove {
+            0% {
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        section div:nth-child(1) {
+            width: 100%
+        }
+
+        section div:nth-child(2) {
+            width: 90%;
+        }
+
+        section div:nth-child(3) {
+            width: 80%;
+        }
+    </style>
+</head>
+
+<body>
+    <div></div>
+    <section>
+        <div></div>
+        <div></div>
+        <div></div>
+    </section>
+    <section>
+        <div></div>
+        <div></div>
+        <div></div>
+    </section>
+    <section>
+        <div></div>
+        <div></div>
+        <div></div>
+    </section>
+    <section>
+        <div></div>
+        <div></div>
+        <div></div>
+    </section>
+    <section>
+        <div></div>
+        <div></div>
+        <div></div>
+    </section>
+</body>
+
+</html>
