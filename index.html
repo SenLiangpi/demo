@@ -1,0 +1,279 @@
+<!DOCTYPE html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><title>拜腾</title><style>@media (min-width:240px) and (max-width:320px) {
+      html {
+        font-size: 12.8px !important
+      }
+    }
+
+    @media (min-width:321px) and (max-width:360px) {
+      html {
+        font-size: 14.4px !important
+      }
+    }
+
+    @media (min-width:361px) and (max-width:375px) {
+      html {
+        font-size: 15px !important
+      }
+    }
+
+    @media (min-width:376px) and (max-width:384px) {
+      html {
+        font-size: 15.36px !important
+      }
+    }
+
+    @media (min-width:385px) and (max-width:414px) {
+      html {
+        font-size: 16.56px !important
+      }
+    }
+
+    @media (min-width:415px) and (max-width:450px) {
+      html {
+        font-size: 18px !important
+      }
+    }
+
+    @media (min-width:451px) and (max-width:500px) {
+      html {
+        font-size: 20px !important
+      }
+    }
+
+    @media (min-width:501px) and (max-width:550px) {
+      html {
+        font-size: 22px !important
+      }
+    }
+
+    @media (min-width:551px) and (max-width:569px) {
+      html {
+        font-size: 22.72px !important
+      }
+    }
+
+    @media (min-width:569px) and (max-width:640px) {
+      html {
+        font-size: 25.6px !important
+      }
+    }
+
+    @media (min-width:641px) and (max-width:667px) {
+      html {
+        font-size: 26.68px !important
+      }
+    }
+
+    @media (min-width:668px) and (max-width:736px) {
+      html {
+        font-size: 29.44px !important
+      }
+    }
+
+    @media (min-width:738px) and (max-width:768px) {
+      html {
+        font-size: 30.72px !important
+      }
+    }
+
+    @media (min-width:769px) and (max-width:800px) {
+      html {
+        font-size: 32px !important
+      }
+    }
+
+    @media (min-width:801px) and (max-width:864px) {
+      html {
+        font-size: 34.56px !important
+      }
+    }
+
+    @media (min-width:800px) and (max-width:900px) {
+      html {
+        font-size: 36px !important
+      }
+    }
+
+    @media (min-width:901px) and (max-width:960px) {
+      html {
+        font-size: 38.4px !important
+      }
+    }
+
+    @media (min-width:961px) and (max-width:992px) {
+      html {
+        font-size: 39.68px !important
+      }
+    }
+
+    @media (min-width:993px) and (max-width:1024px) {
+      html {
+        font-size: 40.96px !important
+      }
+    }
+
+    @media (min-width:1025px) and (max-width:1050px) {
+      html {
+        font-size: 42px !important
+      }
+    }
+
+    @media (min-width:1051px) and (max-width:1080px) {
+      html {
+        font-size: 43.2px !important
+      }
+    }
+
+    @media (min-width:1081px) and (max-width:1280px) {
+      html {
+        font-size: 51.2px !important
+      }
+    }
+
+    @media (min-width:1281px) and (max-width:1366px) {
+      html {
+        font-size: 54.64px !important
+      }
+    }
+
+    @media (min-width:1367px) and (max-width:1440px) {
+      html {
+        font-size: 57.6px !important
+      }
+    }
+
+    @media (min-width:1441px) and (max-width:1600px) {
+      html {
+        font-size: 64px !important
+      }
+    }
+
+    @media (min-width:1601px) and (max-width:1768px) {
+      html {
+        font-size: 70.72px !important
+      }
+    }
+
+    @media (min-width:1769px) and (max-width:1920px) {
+      html {
+        font-size: 76.8px !important
+      }
+    }
+
+    #app {
+      font-family: -apple-system-font, BlinkMacSystemFont, "Helvetica Neue",
+        "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei",
+        Arial, sans-serif;
+    }
+
+    .box {
+      width: 100%;
+      height: 100%;
+      background-color: #1E1E1E;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+      left: 0px;
+      top: 0px;
+      transition: all 2s ease-in-out;
+      z-index: 20;
+    }
+    .bg {
+      width: 100%;
+    }
+    .spinner {
+      -webkit-animation: rotator 1.4s linear infinite;
+      animation: rotator 1.4s linear infinite;
+    }
+    @-webkit-keyframes rotator {
+      0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+      }
+
+      100% {
+        -webkit-transform: rotate(270deg);
+        transform: rotate(270deg);
+      }
+    }
+
+    @keyframes rotator {
+      0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+      }
+
+      100% {
+        -webkit-transform: rotate(270deg);
+        transform: rotate(270deg);
+      }
+    }
+
+    .path {
+      stroke-dasharray: 187;
+      stroke-dashoffset: 0;
+      -webkit-transform-origin: center;
+      transform-origin: center;
+      -webkit-animation: dash 1.4s ease-in-out infinite, colors 5.6s ease-in-out infinite;
+      animation: dash 1.4s ease-in-out infinite, colors 5.6s ease-in-out infinite;
+    }
+
+    @-webkit-keyframes colors {
+      0% {
+        stroke: #4285F4;
+      }
+
+      100% {
+        stroke: #4285F4;
+      }
+    }
+
+    @keyframes colors {
+      0% {
+        stroke: white;
+      }
+
+      100% {
+        stroke: white;
+      }
+    }
+
+    @-webkit-keyframes dash {
+      0% {
+        stroke-dashoffset: 187;
+      }
+
+      50% {
+        stroke-dashoffset: 46.75;
+        -webkit-transform: rotate(135deg);
+        transform: rotate(135deg);
+      }
+
+      100% {
+        stroke-dashoffset: 187;
+        -webkit-transform: rotate(450deg);
+        transform: rotate(450deg);
+      }
+    }
+
+    @keyframes dash {
+      0% {
+        stroke-dashoffset: 187;
+      }
+
+      50% {
+        stroke-dashoffset: 46.75;
+        -webkit-transform: rotate(135deg);
+        transform: rotate(135deg);
+      }
+
+      100% {
+        stroke-dashoffset: 187;
+        -webkit-transform: rotate(450deg);
+        transform: rotate(450deg);
+      }
+    }</style><link href=static/css/app.bfba01727cc01c637395849fdcc433f1.css rel=stylesheet></head><body><div class=box id=appLoading><div style="text-align: center;"><svg class=spinner width=32px height=32px viewBox="0 0 66 66" xmlns=http://www.w3.org/2000/svg><circle class=path fill=none stroke-width=6 stroke-linecap=round cx=33 cy=33 r=30></circle></svg><div style="color: white;margin-top: 24px;font-size: 10px;opacity: 0.8;">加载中...</div></div></div><div id=app></div><script type=text/javascript src=static/js/manifest.37a2ecbb1d1b7e6c9ada.js></script><script type=text/javascript src=static/js/vendor.b42ccc827bf9dd9ea92f.js></script><script type=text/javascript src=static/js/app.548c4a714a88d3b52a42.js></script></body><script>function iosPause() {
+    document.getElementById('video1').pause();
+    document.getElementById('video2').pause();
+  }</script></html>
