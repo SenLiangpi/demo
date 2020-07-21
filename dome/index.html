@@ -4,7 +4,7 @@
  * @Email: pisenliang@gmail.com
  * @Date: 2019-08-21 16:54:41
  * @LastEditors: PiPi
- * @LastEditTime: 2020-07-21 14:38:16
+ * @LastEditTime: 2020-07-21 14:41:04
  -->
 <!DOCTYPE html>
 <html>
@@ -23,6 +23,7 @@
     <button class="record-btn">record</button>
     <audio controls class="audio-player"></audio>
   </div>
+  <div id="aaa"></div>
 </body>
 <script>
   const recordBtn = document.querySelector(".record-btn");
@@ -36,6 +37,7 @@ if (navigator.mediaDevices.getUserMedia) {
       console.log("授权成功！");
       const mediaRecorder = new MediaRecorder(stream);
       recordBtn.onclick = () => {
+        document.getElementById('aaa').text = mediaRecorder.state
         alert(mediaRecorder.state)
         if (mediaRecorder.state === "recording") {
           mediaRecorder.stop();
