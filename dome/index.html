@@ -4,7 +4,7 @@
  * @Email: pisenliang@gmail.com
  * @Date: 2019-08-21 16:54:41
  * @LastEditors: PiPi
- * @LastEditTime: 2020-07-21 14:41:04
+ * @LastEditTime: 2020-07-21 14:48:57
  -->
 <!DOCTYPE html>
 <html>
@@ -20,25 +20,25 @@
 
 <body>
   <div class="app">
-    <button class="record-btn">record</button>
-    <audio controls class="audio-player"></audio>
+    <button id="record-btn">record</button>
+    <audio controls id="audio-player"></audio>
   </div>
   <div id="aaa"></div>
 </body>
 <script>
-  const recordBtn = document.querySelector(".record-btn");
-const player = document.querySelector(".audio-player");
+  const recordBtn = document.getElementById("record-btn");
+const player = document.getElementById("audio-player");
 
 if (navigator.mediaDevices.getUserMedia) {
   var chunks = [];
   const constraints = { audio: true };
   navigator.mediaDevices.getUserMedia(constraints).then(
     stream => {
-      console.log("授权成功！");
+      alert("授权成功！");
       const mediaRecorder = new MediaRecorder(stream);
       recordBtn.onclick = () => {
-        document.getElementById('aaa').text = mediaRecorder.state
-        alert(mediaRecorder.state)
+        document.getElementById('aaa').textContent = mediaRecorder.state;
+        alert(mediaRecorder.state);
         if (mediaRecorder.state === "recording") {
           mediaRecorder.stop();
           recordBtn.textContent = "record";
@@ -63,11 +63,11 @@ if (navigator.mediaDevices.getUserMedia) {
       };
     },
     () => {
-      console.error("授权失败！");
+      alert("授权失败！");
     }
   );
 } else {
-  console.error("浏览器不支持 getUserMedia");
+  alert("浏览器不支持 getUserMedia");
 }
 </script>
 </html>
