@@ -4,7 +4,7 @@
  * @Email: pisenliang@gmail.com
  * @Date: 2019-08-21 16:54:41
  * @LastEditors: PiPi
- * @LastEditTime: 2020-07-21 16:00:17
+ * @LastEditTime: 2020-07-21 16:20:00
  -->
 <!DOCTYPE html>
 <html>
@@ -37,7 +37,9 @@ if (navigator.mediaDevices.getUserMedia) {
       // alert("授权成功！");
       let context = new (window.AudioContext || window.webkitAudioContext);
       let audioInput = context.createMediaStreamSource(stream);
-      let recorder = context.createScriptProcessor(4096, 2, 2); 
+      let recorder = context.createScriptProcessor(4096, 2, 2);
+      var volume = context.createGain();  
+      audioInput.connect(volume);  
       var audioData = {  
         size: 0          //录音文件长度  
         , buffer: []     //录音缓存  
@@ -150,7 +152,11 @@ if (navigator.mediaDevices.getUserMedia) {
         }
         // console.log("录音器状态：", mediaRecorder.state);
       };
-
+      //音频采集  
+      recorder.onaudioprocess = function (e) {  
+          audioData.input(e.inputBuffer.getChannelData(0)); 
+          //record(e.inputBuffer.getChannelData(0));  
+      };
       // mediaRecorder.ondataavailable = e => {
       //   chunks.push(e.data);
       // };  
