@@ -4,7 +4,7 @@
  * @Email: pisenliang@gmail.com
  * @Date: 2019-08-21 16:54:41
  * @LastEditors: PiPi
- * @LastEditTime: 2020-07-31 09:55:41
+ * @LastEditTime: 2020-07-31 10:27:18
  -->
 <!DOCTYPE html>
 <html>
@@ -47,7 +47,7 @@
           buffer: [],//录音缓存  
           inputSampleRate: context.sampleRate,//输入采样率  
           inputSampleBits: 8,//输入采样数位 8, 16  
-          outputSampleRate: context.sampleRate / 4,//输出采样率  
+          outputSampleRate: 10250,//输出采样率  
           oututSampleBits: 8,//输出采样数位 8, 16  
           input: function (data) {
             this.buffer.push(new Float32Array(data));
