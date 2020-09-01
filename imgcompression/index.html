@@ -4,8 +4,8 @@
  * @Github: https://github.com/SenLiangpi
  * @Website: https://senliangpi.github.io/blog/#/
  * @Date: 2020-07-31 15:53:00
- * @LastEditors: PiPi
- * @LastEditTime: 2020-07-31 17:25:50
+ * @LastEditors: Pi Patle
+ * @LastEditTime: 2020-08-31 16:09:23
 --> 
 
 <!DOCTYPE html>
@@ -21,7 +21,7 @@
 </head>
 
 <body>
-  <input id="fileId1" type="file" name="file" onchange="file1(this)" />
+  <input id="fileId1" type="file" name="file" multiple="multiple" onchange="file1(this)" />
   <div id="aaa"></div>
 </body>
 <script>
@@ -38,12 +38,16 @@
   }
   let Imgwidth,imgHeight;
   function file1(e){
-    var url = getObjectURL(e.files[0]);
-    var newImg=new Image();
-    newImg.src=url
-    newImg.onload = function(){
-      imgcompression(url,newImg.width,newImg.height)
-    };
+    for(let a in e.files){
+      // console.log(e.files[a])
+      var url = getObjectURL(e.files[a]);
+      var newImg=new Image();
+      newImg.src=url
+      newImg.onload = function(){
+        imgcompression(url,newImg.width,newImg.height)
+      };
+    }
+    
   }
   let dom = document.getElementById('aaa');
   function imgcompression(a,b,c){
