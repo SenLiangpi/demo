@@ -1,0 +1,43 @@
+<!--
+ * @Author: PiPi
+ * @Github: https://github.com/SenLiangpi
+ * @Email: pisenliang@gmail.com
+ * @Date: 2019-08-21 16:54:41
+ * @LastEditors: Pi Patle
+ * @LastEditTime: 2020-09-25 14:22:26
+ -->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <title>摄像头音频
+  </title>
+  <style>
+    .video{
+      width: 100vw;
+    }
+  </style>
+</head>
+
+<body>
+  <video class="video"></video>
+</body>
+<script>
+  var constraints = { audio: true, video: { width: 1280, height: 720 } };
+
+  navigator.mediaDevices.getUserMedia(constraints)
+  .then(function (mediaStream) {
+    var video = document.querySelector("video");
+    video.srcObject = mediaStream;
+    video.onloadedmetadata = function (e) {
+      video.play();
+    };
+  })
+  .catch(function (err) {
+    console.log(err.name + ": " + err.message);
+  });
+</script>
+
+</html>
