@@ -1,0 +1,60 @@
+<!--
+ * @Author: PiPi
+ * @Github: https://github.com/SenLiangpi
+ * @Email: pisenliang@gmail.com
+ * @Date: 2019-08-21 16:54:41
+ * @LastEditors: Pi Patle
+ * @LastEditTime: 2020-09-30 14:22:28
+ -->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <title>pdf
+  </title>
+  <script src="pdf.js"></script>
+  <script src="pdf.worker.js"></script>
+  <style>
+
+  </style>
+</head>
+
+<body>
+  <div id="pdf">
+  </div>
+</body>
+<script>
+  const pdfAnalysis = (data) => {
+    PDFJS.getDocument(data.url).then(function (pdf) {
+      if (pdf) {
+        for (var a = 1; a <= pdf.numPages; a++) {/*  */
+          let c = document.createElement('canvas');
+          c.className = "canvasclock";
+          document.getElementById(data.id).append(c);
+          openPage(pdf, a, c.getContext('2d'));
+        }
+      }
+    })
+  }
+
+  function openPage(pdfFile, pageNumber, context) {
+    var e = 2;
+    pdfFile.getPage(pageNumber).then(
+      function (page) {
+        let viewport = page.getViewport(e);
+        const width = 100, height = 100 / (viewport.width / viewport.height);
+        context.canvas.width = viewport.width;
+        context.canvas.height = viewport.height;
+        context.canvas.style.width = width + 'vw';
+        context.canvas.style.height = height + 'vw';
+        var f = { canvasContext: context, viewport: viewport };
+        page.render(f);
+      }
+    )
+  }
+  pdfAnalysis({url:'IndexedDB - Web API 接口参考 _ MDN.pdf',id:'pdf'})
+</script>
+
+</html>
