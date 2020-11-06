@@ -1,0 +1,75 @@
+<!--
+ * @Author: Pi Patle
+ * @Email: pisenliang@gmail.com
+ * @Github: https://github.com/SenLiangpi
+ * @Website: https://senliangpi.github.io/blog/#/
+ * @Date: 2020-10-27 10:39:44
+ * @LastEditors: Pi Patle
+ * @LastEditTime: 2020-10-27 11:14:27
+-->
+<!doctype html>
+<html>
+
+<head>
+  <!--声明当前页面的编码集：charset=gbk,gb2312(中文编码)，utf-8国际编码-->
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+  <!--当前页面的三要素-->
+  <title>Proxy</title>
+  <meta name="Keywords" content="关键词,关键词">
+  <meta name="description" content="">
+  <style>
+  </style>
+</head>
+
+<body style="background-color: black;">
+  <script>
+    let data = [1,2,3,4,5]
+    var text_proxu = new Proxy(data, {
+      //方法用于拦截对象的读取属性操作。
+      // target 目标对象 property 被获取的属性名 receiver Proxy或者继承Proxy的对象
+      "get": function (target, property, receiver) {
+        console.log('========= get ==========')
+        console.log(target)
+        console.log(property)
+        console.log(receiver)
+      },
+      //方法是设置属性值操作的捕获器。
+      // target 目标对象。
+      // property 将被设置的属性名或 Symbol。
+      // value 新属性值。
+      // receiver 最初被调用的对象。通常是 proxy 本身，但 handler 的 set 方法也有可能在原型链上，或以其他方式被间接地调用（因此不一定是 proxy 本身）。
+      "set": function (target, property, value, receiver) {
+        console.log('========= set ==========')
+        console.log(target)
+        console.log(property)
+        console.log(value)
+        console.log(receiver)
+      },
+      // 方法用于拦截对对象属性的 delete 操作
+      // target 目标对象。 property 待删除的属性名。
+      "deleteProperty": function (target, property) {
+        
+      },
+      //方法用于拦截 Reflect.ownKeys().
+      // target 目标对象.
+      "ownKeys": function (target, sKey) {
+        
+      },
+      // 方法是针对 in 操作符的代理方法。
+      // target 目标对象. prop 需要检查是否存在的属性.
+      "has": function (target, prop) {
+        
+      },
+      // "defineProperty": function (oTarget, sKey, oDesc) {
+        
+      // },
+      // "getOwnPropertyDescriptor": function (oTarget, sKey) {
+        
+      // },
+    });
+    // text_proxu.f
+  </script>
+</body>
+
+</html>
