@@ -1,0 +1,119 @@
+<!--
+ * @Author: Pi Patle
+ * @Email: pisenliang@gmail.com
+ * @Github: https://github.com/SenLiangpi
+ * @Website: https://senliangpi.github.io/blog/#/
+ * @Date: 2020-10-12 11:03:53
+ * @LastEditors: Pi Patle
+ * @LastEditTime: 2020-10-12 13:59:47
+-->
+<!doctype html>
+<html>
+<head>
+    <!--声明当前页面的编码集：charset=gbk,gb2312(中文编码)，utf-8国际编码-->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <!--当前页面的三要素-->
+    <title>動態的數字</title>
+    <meta name="Keywords" content="关键词,关键词">
+    <meta name="description" content="">
+
+    <style>
+        *{margin: 0;padding: 0;}
+        body {
+          margin: 2rem;
+        }
+        /* 版本1 */
+        @property --num {
+          syntax: "<integer>";
+          initial-value: 0;
+          inherits: false;
+        }
+        .v-1 {
+          transition: --num 3s;
+          counter-set: num var(--num);
+          font: 800 40px system-ui;
+        }
+        .v-1::after {
+          content: counter(num);
+        }
+        .v-1:hover {
+          --num: 100;
+        }
+        /* 版本2 */
+        /* @property --num {
+          syntax: "<integer>";
+          initial-value: 0;
+          inherits: false;
+        } */
+
+        .v-2 {
+          animation: counter 5s infinite alternate ease-in-out;
+          counter-reset: num var(--num);
+          font: 800 40px system-ui;
+          padding: 2rem;
+        }
+        .v-2::after {
+          content: counter(num);
+        }
+
+        @keyframes counter {
+          from {
+            --num: 0;
+          }
+          to {
+            --num: 100;
+          }
+        }
+        /* 版本3 */
+        @property --percent {
+          syntax: "<number>";
+          initial-value: 0;
+          inherits: false;
+        }
+        @property --temp {
+          syntax: "<number>";
+          initial-value: 0;
+          inherits: false;
+        }
+        @property --v1 {
+          syntax: "<integer>";
+          initial-value: 0;
+          inherits: false;
+        }
+        @property --v2 {
+          syntax: "<integer>";
+          initial-value: 0;
+          inherits: false;
+        }
+        .v-3 {
+          font: 800 40px monospace;
+          padding: 2rem;
+          transition: --percent 0.3s;
+          --temp: calc(var(--percent) * 100);
+          --v1: max(var(--temp) - 0.5, 0);
+          --v2: max((var(--temp) - var(--v1)) * 100 - 0.5, 0);
+          counter-reset: v1 var(--v1) v2 var(--v2);
+        }
+        .v-3::before {
+          content: counter(v1) "." counter(v2, decimal-leading-zero) "%";
+        }
+    </style>
+</head>
+<body>
+  動態的數字!
+  <br>
+  <br>
+  <div>one</div>
+  <div class="v-1"></div>
+  <div>two</div>
+  <div class="v-2"></div>
+  <div>three</div>
+  <div class="v-3" id="v_3"></div>
+<script>
+  setInterval(()=>{
+    document.getElementById("v_3").style.setProperty("--percent", Math.random());
+  }, 2000);
+</script>
+</body>
+</html>

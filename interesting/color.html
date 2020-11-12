@@ -1,0 +1,105 @@
+<!--
+ * @Author: Pi Patle
+ * @Email: pisenliang@gmail.com
+ * @Github: https://github.com/SenLiangpi
+ * @Website: https://senliangpi.github.io/blog/#/
+ * @Date: 2020-10-12 11:03:53
+ * @LastEditors: Pi Patle
+ * @LastEditTime: 2020-10-12 14:08:00
+-->
+<!doctype html>
+<html>
+<head>
+    <!--声明当前页面的编码集：charset=gbk,gb2312(中文编码)，utf-8国际编码-->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <!--当前页面的三要素-->
+    <title>顔色的選擇</title>
+    <meta name="Keywords" content="关键词,关键词">
+    <meta name="description" content="">
+
+    <style>
+      * {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+          Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+      }
+      .container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .inputcont {
+        margin: 1em;
+        display: flex;
+        align-items: flex-end;
+        height: 6em;
+      }
+      .outputcont {
+        margin: 1em;
+        display: flex;
+        align-items: flex-end;
+        height: 6em;
+      }
+      label {
+        font-weight: bold;
+        margin-right: 1em;
+      }
+      #color {
+        height: 6em;
+        width: 10em;
+      }
+    </style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="inputcont">
+      <label for="color">Enter color:</label>
+      <input type="color" name="color" id="color">
+    </div>
+  
+    <div class="outputcont">
+      <label for="output" id="lightnesslabel">Lightness: </label>
+      <span id='output'>0.000</span>
+    </div>
+  
+  </div>
+<script>
+  const colorInput = document.getElementById("color"),
+  output = document.getElementById("output");
+
+  colorInput.addEventListener("input", onInputChange);
+
+  function hexToRgb(h) {
+    var r = parseInt(cutHex(h).substring(0, 2), 16),
+      g = parseInt(cutHex(h).substring(2, 4), 16),
+      b = parseInt(cutHex(h).substring(4, 6), 16);
+    return "rgb(" + r + "," + g + "," + b + ")";
+  }
+  function cutHex(h) {
+    return h.charAt(0) == "#" ? h.substring(1, 7) : h;
+  }
+
+  function onInputChange(e) {
+    output.textContent = getLightnessOfRGB(hexToRgb(e.target.value)).toFixed(4);
+  }
+
+  function getLightnessOfRGB(rgbString) {
+    // First convert to an array of integers by removing the whitespace, taking the 3rd char to the 2nd last then splitting by ','
+    // 首先通过删除空格将整数转换为整数数组，将第三个字符移至第二个字符，然后以“，”分隔
+    const rgbIntArray = rgbString
+      .replace(/ /g, "")
+      .slice(4, -1)
+      .split(",")
+      .map((e) => parseInt(e));
+    // Get the highest and lowest out of red green and blue
+    // 从红色，绿色和蓝色中获取最高和最低值
+    const highest = Math.max(...rgbIntArray);
+    const lowest = Math.min(...rgbIntArray);
+    // Return the average divided by 255
+    // 返回平均值除以255
+    return (highest + lowest) / 2 / 255;
+  }
+</script>
+</body>
+</html>
