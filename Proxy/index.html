@@ -5,7 +5,7 @@
  * @Website: https://senliangpi.github.io/blog/#/
  * @Date: 2020-10-27 10:39:44
  * @LastEditors: Pi Patle
- * @LastEditTime: 2020-10-27 11:14:27
+ * @LastEditTime: 2020-12-10 17:46:17
 -->
 <!doctype html>
 <html>
@@ -68,6 +68,64 @@
         
       // },
     });
+    let b = 0,dd = 100,cc = 100000000/dd;
+    let time = new Date().getTime();
+    // for(let a = 0; a<100000000;a++){
+    //   b+=1;
+    // }
+    // console.log(new Date().getTime()-time);
+    // console.log(b);
+    
+    var makeWorker = function (fn, args, callback) {
+      var fnString = 'self.addEventListener("message", function (e) {self.postMessage((' + fn.toString() + ').apply(this, e.data))});',
+        blob = new Blob([fnString], { type: 'text/javascript' }),
+        url = URL.createObjectURL(blob),
+        worker = new Worker(url);
+      worker.postMessage(args);
+      worker.addEventListener('message', function (e) {
+        URL.revokeObjectURL(url);
+        callback(e.data);
+      });
+      return worker;
+    };
+    var calculateSubTotal = function (count,zz) {
+      // var sum = 0;
+      // for (var i = 0; i < 100000000; ++i) {
+      //   sum+=1;
+      // }
+      return [count,zz];
+    };
+    var workerFinished = function (subTotal) {
+      console.log(new Date().getTime()-time);
+      console.log(subTotal);
+    };
+    for(let q = 0;q<dd;q++){
+      makeWorker(calculateSubTotal, [cc,q], workerFinished);
+    }
+    
+    // const xx = new Promise((resolve, reject)=>{
+    //   for(let a = 0; a<10000000;a++){
+    //     b+=1
+    //   }
+    //   resolve(b);
+    // })
+    // setTimeout(()=>{
+    //   console.log(b)
+    // },0)
+    // console.log('Promise ster')
+    // xx.then(request=>{
+    //   console.log(request)
+    // })
+    // console.log('Promise end')
+    // let json = {a:1,b:2,c:3};
+    // let x = {};
+    // for(let b in json){
+    //   console.log(json[b])
+    //   if(json[b]==1){
+    //     x[b] = json[b]
+    //   }
+    // }
+    // console.log(x)
     // text_proxu.f
   </script>
 </body>

@@ -1,0 +1,109 @@
+<!--
+ * @Author: Pi Patle
+ * @Email: pisenliang@gmail.com
+ * @Github: https://github.com/SenLiangpi
+ * @Website: https://senliangpi.github.io/blog/#/
+ * @Date: 2020-11-20 16:30:18
+ * @LastEditors: Pi Patle
+ * @LastEditTime: 2020-11-24 09:56:17
+-->
+<!doctype html>
+<html>
+
+<head>
+  <!--声明当前页面的编码集：charset=gbk,gb2312(中文编码)，utf-8国际编码-->
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+  <!--当前页面的三要素-->
+  <title>获取图片像素颜色</title>
+  <meta name="Keywords" content="关键词,关键词">
+  <meta name="description" content="">
+  <style>
+  </style>
+</head>
+
+<body>
+  <input id="fileId1" type="file" name="file" multiple="multiple" onchange="file1(this)" />
+  <div id="aaa"></div>
+  <script>
+    function getpixelcolour(canvas, x, y) {
+      var cx = canvas.getContext('2d');
+      var pixel = cx.getImageData(x, y, 1, 1);
+      console.log(pixel);
+      return {
+        r: pixel.data[0],
+        g: pixel.data[1],
+        b: pixel.data[2],
+        a: pixel.data[3]
+      };
+    }
+
+  function getObjectURL(file) {
+    var url = null;
+    if (window.createObjcectURL != undefined) {
+      url = window.createOjcectURL(file);
+    } else if (window.URL != undefined) {
+      url = window.URL.createObjectURL(file);
+    } else if (window.webkitURL != undefined) {
+      url = window.webkitURL.createObjectURL(file);
+    }
+    return url;
+  }
+  let Imgwidth,imgHeight,canvasDom,dom = document.getElementById('aaa'),newImage;
+  function file1(e){
+    // for(let a in e.files){
+      // console.log(e.files[a])
+      if(newImage){
+        dom.removeChild(newImage);
+      }
+      var url = window.URL.createObjectURL(e.files[0]);
+      var newImg=new Image();
+      newImg.src=url
+      newImg.onload = function(){
+        console.log('aaaa');
+        imgcompression(url,newImg.width,newImg.height)
+      };
+    // }
+  }
+  function imgcompression(a,b,c){
+    let proportion;
+    // if(b > 1080 || c > 1080){
+      if(b>c){
+        proportion = b/500
+      }else{
+        proportion = c/500
+      }
+      canvasDom = document.createElement('canvas');
+      canvasDom.width = b/proportion;
+      canvasDom.height = c/proportion;
+      canvasDom.style.margin = '100px';
+      // dom.appendChild(canvasDom);
+      var ctx = canvasDom.getContext("2d");
+      newImage = new Image();
+      //需要平铺的图片
+      newImage.src = a;
+      newImage.onload = function (){
+        ctx.width = canvasDom.width;
+        ctx.height = canvasDom.height;
+        ctx.drawImage(this, 0, 0, ctx.width, ctx.height);
+        // let img1 = new Image();
+        // img1.src=canvasDom.toDataURL("image/jpeg",0.9)
+        newImage.width = canvasDom.width;
+        newImage.height = canvasDom.height;
+        newImage.style.display = 'block';
+        newImage.style.margin = '100px auto';
+        dom.appendChild(newImage)
+        
+        let left = getpixelcolour(canvasDom,1,canvasDom.height/2);
+        let right = getpixelcolour(canvasDom,(canvasDom.width-1),canvasDom.height/2);
+        console.log(left,right);
+        let $body = document.getElementsByTagName("body")[0]
+        $body.style.background = `linear-gradient(95deg, rgb(${left.r},${left.g},${left.b}) 0%, rgb(${right.r}, ${right.g}, ${right.b}) 100%)`;
+        // background: linear-gradient(65deg, rgb(0, 36, 83) 34%, rgb(255, 43, 74) 100%);
+      }
+    // }
+  }
+  </script>
+</body>
+
+</html>

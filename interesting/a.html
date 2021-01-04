@@ -1,0 +1,104 @@
+<!--
+ * @Author: Pi Patle
+ * @Email: pisenliang@gmail.com
+ * @Github: https://github.com/SenLiangpi
+ * @Website: https://senliangpi.github.io/blog/#/
+ * @Date: 2020-11-19 15:00:33
+ * @LastEditors: Pi Patle
+ * @LastEditTime: 2020-11-24 10:04:02
+-->
+<!doctype html>
+<html>
+
+<head>
+  <!--声明当前页面的编码集：charset=gbk,gb2312(中文编码)，utf-8国际编码-->
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+  <!--当前页面的三要素-->
+  <title>动画过程</title>
+  <meta name="Keywords" content="关键词,关键词">
+  <meta name="description" content="">
+  <style>
+    *{margin: 0;padding: 0;}
+    .button{
+      width: 200px;
+      height: 60px;
+      line-height: 60px;
+      text-align: center;
+      color: #fff;
+      background-color: #FF9800;
+      border-radius: 30px;
+      margin: 130px;
+      font-size: 14px;
+    }
+    .button1{
+      width: 100vw;
+      height: 100vh;
+      line-height: 100vh;
+      text-align: center;
+      color: #FF9800;
+      background-color: #FF9800;
+      font-size: 30px;
+      position: fixed;
+      top: 0px;
+      left: 0px;
+      transition: all 0.5s ease-in-out 0s;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="button">Saint Petersburg</div>
+  <div class="button1" id="button1">Saint Petersburg</div>
+  <script>
+    let button1 = document.getElementById('button1');
+    let index = 0;
+    button1.addEventListener('transitionend',()=>{
+      console.log('bbbbbb')
+      if(index==0){
+        button1.style.fontSize = '80px';
+        index = 1;
+        return
+      }
+      if(index==1){
+        button1.style.fontSize = '30px';
+        index = 2;
+        return
+      }
+      if(index==2){
+        button1.style.fontSize = '120px';
+        index = 3;
+        return
+      }
+      if(index==3){
+        button1.style.fontSize = '14px';
+        button1.style.width = '200px';
+        button1.style.height = '60px';
+        button1.style.top = '130px';
+        button1.style.left = '130px';
+        button1.style.borderRadius = '30px';
+        button1.style.lineHeight = '60px';
+        index = 4
+        return
+      }
+      if(index==4){
+        button1.style.display = 'none';
+        return
+      }
+    },false)
+    setTimeout(()=>{
+      button1.style.color = '#fff';
+    },500);
+    button1.addEventListener('animationend',function(){
+      console.log('aaaaa')
+    },false)
+    button1.addEventListener("animationiteration",function(e){
+      console.log("log at beginning of each subsequent iteration");
+    },false);
+    button1.addEventListener("animationend",function(e){
+      console.log("log at end of monkey animation");
+    },false);
+  </script>
+</body>
+
+</html>
