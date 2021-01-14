@@ -5,7 +5,7 @@
  * @Website: https://senliangpi.github.io/blog/#/
  * @Date: 2021-01-07 15:16:41
  * @LastEditors: Pi Patle
- * @LastEditTime: 2021-01-14 14:08:55
+ * @LastEditTime: 2021-01-14 14:42:01
 -->
 <!DOCTYPE html>
 <html>
@@ -21,7 +21,25 @@
 <body>
 </body>
 <script>
-
+  const data = `iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试
+  iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试
+  iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试
+  iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试
+  iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试
+  iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试
+  iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试
+  iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试
+  iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试
+  iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试
+  iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试
+  iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试
+  iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试
+  iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试
+  iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试`
+window.parent.postMessage( {msg: data}, '*');
+window.addEventListener("message", function (data){
+  console.log(data);
+}, false);
 </script>
 
 </html>
