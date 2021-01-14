@@ -5,7 +5,7 @@
  * @Website: https://senliangpi.github.io/blog/#/
  * @Date: 2021-01-07 15:16:41
  * @LastEditors: Pi Patle
- * @LastEditTime: 2021-01-14 15:00:36
+ * @LastEditTime: 2021-01-14 15:07:00
 -->
 <!DOCTYPE html>
 <html>
@@ -38,9 +38,10 @@
   iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试
   iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试`
 window.parent.postMessage( {msg: data}, '*');
+console.log('aaaaaaaaa');
 window.addEventListener("message", function (data){
   const xxxDom = document.getElementById('xxx');
-  xxxDom.innerHTML = data
+  xxxDom.innerHTML = data.data
   // console.log(data);
 }, false);
 </script>
