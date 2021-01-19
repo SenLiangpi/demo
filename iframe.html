@@ -5,7 +5,7 @@
  * @Website: https://senliangpi.github.io/blog/#/
  * @Date: 2021-01-07 15:16:41
  * @LastEditors: Pi Patle
- * @LastEditTime: 2021-01-14 15:07:00
+ * @LastEditTime: 2021-01-19 10:02:42
 -->
 <!DOCTYPE html>
 <html>
@@ -37,13 +37,76 @@
   iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试
   iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试
   iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试iframe 跨域交互测试`
-window.parent.postMessage( {msg: data}, '*');
+
+/**
+ * @description: token
+ * @param { get: 'token'}, '*'
+ * @return { get_name: 'token',data: token }
+ */
+window.parent.postMessage( { get: 'token'}, '*');
+
+/**
+ * @description: accountId
+ * @param { get: 'accountId'}, '*'
+ * @return { get_name: 'accountId',data: accountId }
+ */
+ window.parent.postMessage( { get: 'accountId'}, '*');
+
+ /**
+ * @description: displayName
+ * @param { get: 'displayName'}, '*'
+ * @return { get_name: 'displayName',data: displayName }
+ */
+window.parent.postMessage( { get: 'displayName'}, '*');
+
+/**
+ * @description: mobile
+ * @param { get: 'mobile'}, '*'
+ * @return { get_name: 'mobile',data: mobile }
+ */
+ window.parent.postMessage( { get: 'mobile'}, '*');
+
+ /**
+  * @description: orgCode
+  * @param { get: 'orgCode'}, '*'
+  * @return { get_name: 'orgCode',data: orgCode }
+  */
+window.parent.postMessage( { get: 'orgCode'}, '*');
+
+ /**
+  * @description: orgCode
+  * @param { get: 'orgCode'}, '*'
+  * @return { get_name: 'orgCode',data: orgCode }
+  */
+ window.parent.postMessage( { get: 'orgCode'}, '*');
+
+ /**
+  * @description: token_invalidation token失效
+  * @param { get: 'token_invalidation'}, '*'
+  * @return
+  */
+ window.parent.postMessage( { get: 'token_invalidation'}, '*');
+ 
 console.log('aaaaaaaaa');
 window.addEventListener("message", function (data){
+  console.log(data.data)
   const xxxDom = document.getElementById('xxx');
-  xxxDom.innerHTML = data.data
-  // console.log(data);
+  xxxDom.innerHTML = data.data.get_name;
+  console.log(data);
 }, false);
+
+
+/**
+ * @description: 监听器 统一接收请求返回值
+ * @param {*}
+ * @return {*}
+ */
+// window.addEventListener("message", function (data){
+//   //返回的数据
+//   const result = data.data.get_name;
+// }, false);
+
+
 </script>
 
 </html>
