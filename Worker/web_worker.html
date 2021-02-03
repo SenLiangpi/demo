@@ -1,0 +1,64 @@
+<!--
+ * @Author: Pi Patle
+ * @Email: pisenliang@gmail.com
+ * @Github: https://github.com/SenLiangpi
+ * @Website: https://senliangpi.github.io/blog/#/
+ * @Date: 2021-02-02 17:07:13
+ * @LastEditors: Pi Patle
+ * @LastEditTime: 2021-02-02 17:07:53
+-->
+<!doctype html>
+<html>
+
+<head>
+  <!--声明当前页面的编码集：charset=gbk,gb2312(中文编码)，utf-8国际编码-->
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+  <!--当前页面的三要素-->
+  <title>Proxy</title>
+  <meta name="Keywords" content="关键词,关键词">
+  <meta name="description" content="">
+  <style>
+  </style>
+</head>
+
+<body style="background-color: black;">
+  <script>
+    let b = 0,dd = 100,cc = 100000000/dd;
+    let time = new Date().getTime();
+    // for(let a = 0; a<100000000;a++){
+    //   b+=1;
+    // }
+    // console.log(new Date().getTime()-time);
+    // console.log(b);
+    
+    var makeWorker = function (fn, args, callback) {
+      var fnString = 'self.addEventListener("message", function (e) {self.postMessage((' + fn.toString() + ').apply(this, e.data))});',
+        blob = new Blob([fnString], { type: 'text/javascript' }),
+        url = URL.createObjectURL(blob),
+        worker = new Worker(url);
+      worker.postMessage(args);
+      worker.addEventListener('message', function (e) {
+        URL.revokeObjectURL(url);
+        callback(e.data);
+      });
+      return worker;
+    };
+    var calculateSubTotal = function (count,zz) {
+      // var sum = 0;
+      // for (var i = 0; i < 100000000; ++i) {
+      //   sum+=1;
+      // }
+      return [count,zz];
+    };
+    var workerFinished = function (subTotal) {
+      console.log(new Date().getTime()-time);
+      console.log(subTotal);
+    };
+    for(let q = 0;q<dd;q++){
+      makeWorker(calculateSubTotal, [cc,q], workerFinished);
+    }
+  </script>
+</body>
+
+</html>
