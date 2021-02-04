@@ -1,0 +1,96 @@
+<!--
+ * @Author: Pi Patle
+ * @Email: pisenliang@gmail.com
+ * @Github: https://github.com/SenLiangpi
+ * @Website: https://senliangpi.github.io/blog/#/
+ * @Date: 2021-01-07 15:15:36
+ * @LastEditors: Pi Patle
+ * @LastEditTime: 2021-02-04 10:44:10
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>loading</title>
+    <style>
+        html,
+        body {
+					margin: 0px;
+					padding: 0px;
+					height: 100%;
+					overflow: hidden;
+        }
+        .loading div {
+					background-color: #f3f3f3;
+					height: 24px;
+					margin: 0px 0px 12px 0px;
+        }
+        .loading>div:first-child {
+					height: 300px;
+        }
+        section {
+					padding: 0px 12px;
+        }
+        .loading div {
+          animation: mymove 2s infinite;
+        }
+        @keyframes mymove {
+					0% {
+						opacity: 0;
+					}
+
+					50% {
+						opacity: 1;
+					}
+
+					100% {
+						opacity: 0;
+					}
+        }
+        .loading section div:nth-child(1) {
+					width: 100%
+        }
+        .loading section div:nth-child(2) {
+					width: 90%;
+        }
+        .loading section div:nth-child(3) {
+					width: 80%;
+        }
+    </style>
+</head>
+
+<body>
+	<div class="loading">
+		<div></div>
+		<section>
+			<div></div>
+			<div></div>
+			<div></div>
+		</section>
+		<section>
+			<div></div>
+			<div></div>
+			<div></div>
+		</section>
+		<section>
+			<div></div>
+			<div></div>
+			<div></div>
+		</section>
+		<section>
+			<div></div>
+			<div></div>
+			<div></div>
+		</section>
+		<section>
+			<div></div>
+			<div></div>
+			<div></div>
+		</section>
+	</div>
+</body>
+
+</html>
