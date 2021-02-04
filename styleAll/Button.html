@@ -5,7 +5,7 @@
  * @Website: https://senliangpi.github.io/blog/#/
  * @Date: 2021-02-04 11:17:08
  * @LastEditors: Pi Patle
- * @LastEditTime: 2021-02-04 11:30:56
+ * @LastEditTime: 2021-02-04 15:28:03
 -->
 <!DOCTYPE html>
 <html lang="en" id="body">
@@ -14,7 +14,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>loading</title>
+  <title>Button</title>
   <style>
     * {
       margin: 0;
@@ -29,89 +29,79 @@
       align-items: center; */
       width: 100vw;
       height: 100vh;
+      padding: 0px;
+      /* overflow: hidden; */
     }
-    .container div{
+    .container .box{
       margin-left: 50px;
       margin-top: 50px;
-      float: left;
+      /* float: left; */
     }
     .box1 {
       border-radius: 5px;
-      background: #f0f0f0;
-      padding: 10px 20px;
       background: #f8f8f8;
-      box-shadow:  10px 10px 10px #cccccc,
-        10px 10px 10px #ffffff,
-        0 0 0 #cccccc inset,
-        0 0 0 #ffffff inset;
     }
     .box2 {
       border-radius: 20px;
-      background: #f0f0f0;
-      padding: 10px 20px;
       background: #f8f8f8;
-      box-shadow:  10px 10px 10px #cccccc,
-        10px 10px 10px #ffffff,
-        0 0 0 #cccccc inset,
-        0 0 0 #ffffff inset;
     }
     .box3 {
       border-radius: 5px;
-      background: #f0f0f0;
-      padding: 10px 20px;
       background: #1890ff;
-      box-shadow:  10px 10px 10px #cccccc,
-        10px 10px 10px #ffffff,
-        0 0 0 #cccccc inset,
-        0 0 0 #ffffff inset;
       color: #fff;
     }
     .box4 {
       border-radius: 20px;
-      background: #f0f0f0;
-      padding: 10px 20px;
       background: #1890ff;
-      box-shadow:  10px 10px 10px #cccccc,
-        10px 10px 10px #ffffff,
-        0 0 0 #cccccc inset,
-        0 0 0 #ffffff inset;
       color: #fff;
     }
     .box5 {
       border-radius: 5px;
-      background: #f0f0f0;
-      padding: 10px 20px;
       background: #ff4d4f;
-      box-shadow:  10px 10px 10px #cccccc,
-        10px 10px 10px #ffffff,
-        0 0 0 #cccccc inset,
-        0 0 0 #ffffff inset;
       color: #fff;
     }
     .box6 {
       border-radius: 20px;
-      background: #f0f0f0;
-      padding: 10px 20px;
       background: #ff4d4f;
+      color: #fff;
+    }
+    .box{
+      padding: 10px 20px;
       box-shadow:  10px 10px 10px #cccccc,
         10px 10px 10px #ffffff,
         0 0 0 #cccccc inset,
         0 0 0 #ffffff inset;
-      color: #fff;
+      /* cursor: pointer; */
+      transition: all 0.2s;
+      /* pointer-events: none; */
+      border-style: none; 
+      outline: none;
+    }
+    .box:hover {
+      box-shadow: 5px 5px 10px #cccccc, 10px 10px 10px #ffffff, 0 0 0 #cccccc inset, 0 0 0 #ffffff inset;
     }
   </style>
 </head>
 
 <body>
   <div class="container">
-    <div class="box1">Primary</div>
-    <div class="box2">Primary</div>
-    <div class="box3">Primary</div>
-    <div class="box4">Primary</div>
-    <div class="box5">Primary</div>
-    <div class="box6">Primary</div>
+    <div>
+      <button class="box1 box" name="button" onclick="aaa()">Primary</button>
+      <button class="box2 box">Primary</button>
+    </div>
+    <div>
+      <button class="box3 box">Primary</button>
+      <button class="box4 box">Primary</button>
+    </div>
+    <div>
+      <button class="box5 box">Primary</button>
+      <button class="box6 box">Primary</button>
+    </div>
   </div>
   <script>
+    function aaa(){
+      // alert('aa');
+    }
   </script>
 </body>
 
