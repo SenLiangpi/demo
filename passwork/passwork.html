@@ -1,0 +1,148 @@
+<!--
+ * @Author: Pi Patle
+ * @Email: pisenliang@gmail.com
+ * @Github: https://github.com/SenLiangpi
+ * @Website: https://senliangpi.github.io/blog/#/
+ * @Date: 2021-06-16 13:52:10
+ * @LastEditors: Pi Patle
+ * @LastEditTime: 2021-06-18 10:05:27
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <title>formula-1.0.0-测试</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <style>
+          #dom {
+              width: 100px;
+              height: 100px;
+              background-color: #000;
+              position: absolute;
+              top: 0px;
+              left: 0px;
+          }
+  
+          #t {
+              width: 0px;
+              height: 100px;
+              position: absolute;
+              top: 0px;
+              left: 0px;
+              background-color: #f00;
+          }
+      </style>
+</head>
+<div style="width: 800px;margin:200px auto 0;">
+  <h2>密码生成器 Password generator</h2>
+  <div class="row">
+      <div class="col-md-6">
+          <div class="form-group">
+            <label for="exampleInputEmail1">生成个数(quantity)</label>
+            <input class="form-control" id="quantity" placeholder="quantity" value=0>
+          </div>
+      </div>
+      <div class="col-md-6">
+          <div class="form-group">
+            <label for="exampleInputEmail1">生成位数(digits)</label>
+            <input class="form-control" id="digits" placeholder="digits" value=0>
+          </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="exampleInputEmail1">类型(type)</label>
+          <select class="form-control" id="type" placeholder="type">
+            <option value="Number">纯数字(Number)</option>
+            <option value="Mixing">混合(Mixing)</option>
+          </select>
+        </div>
+      </div>
+  </div>
+  <button type="button" id="myButton" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off">
+      Calculation
+  </button>
+  <p id="jieguo" style="margin-top:10px;">结果</p>
+</div>
+<div id="overview"></div>
+<body>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+    crossorigin="anonymous"></script>
+  <script>
+    function pass_number(quantity){
+      return digits=>{
+        pass4 = [];
+        for(let a = 0;a<quantity;a++){
+          let pass = '';
+          for(let b = 0;b<digits;b++){
+            pass+= String(parseInt(Math.random() * 10))
+          }
+          pass4.push(pass);
+        }
+        return pass4
+      }
+    }
+
+    function pass_mixing(quantity){
+      const keyStr1 = ['0','1','2','3','4','5','6','7','8','9'];//10
+      const keyStr2 = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];//26
+      const keyStr3 = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];//26
+      const keyStr4 = ['!','@','#','$','%','^','&','*','_','[',']','?']//12
+      return digits=>{
+        pass4 = [];
+        for(let a = 0;a<quantity;a++){
+          let pass = '';
+          for(let b = 0;b<digits;b++){
+            switch(String(parseInt(Math.random() * 4))){
+              case "0":
+                pass += keyStr1[parseInt(Math.random() * 10)];
+                break;
+              case "1":
+                pass += keyStr2[parseInt(Math.random() * 26)];
+                break;
+              case "2":
+                pass += keyStr3[parseInt(Math.random() * 26)];
+                break;
+              case "3":
+                pass += keyStr4[parseInt(Math.random() * 12)];
+                break;
+            }
+          }
+          pass4.push(pass);
+        }
+        return pass4
+      }
+    }
+    $('#myButton').on('click', function () {
+      try {
+        // 生成个数(quantity)
+        const quantity = $('#quantity').val() * 1,
+        digits = $('#digits').val() * 1
+        type = $('#type').val();
+        let res,innerHTML = '';
+        // console.log(quantity,digits,type)
+        if(type === "Number"){
+          res = pass_number(quantity)(digits)
+        }
+        if(type === "Mixing"){
+          res = pass_mixing(quantity)(digits)
+        }
+        for(let x in res){
+          innerHTML+= '<p>'+res[x]+'</p>';
+        }
+        document.getElementById('jieguo').innerHTML = innerHTML;
+      }
+      catch (err) {
+        document.getElementById('jieguo').innerHTML = err;
+      }
+    })
+  </script>
+</body>
+
+</html>
