@@ -1,3 +1,12 @@
+<!--
+ * @Author: Pi Patle
+ * @Email: pisenliang@gmail.com
+ * @Github: https://github.com/SenLiangpi
+ * @Website: https://senliangpi.github.io/blog/#/
+ * @Date: 2022-01-29 10:51:11
+ * @LastEditors: Pi Patle
+ * @LastEditTime: 2022-04-02 17:09:41
+-->
 # 技术样式 Demo
 #### 图片压缩
 - https://senliangpi.github.io/demo/imgcompression/index.html
@@ -24,6 +33,7 @@
 - https://senliangpi.github.io/demo/styleAll/loading.html
 - https://senliangpi.github.io/demo/styleAll/loading1.html
 - https://senliangpi.github.io/demo/styleAll/menu.html
+- https://senliangpi.github.io/demo/styleAll/Button1.html
 #### tree 使用 murmurHash 生成树结构数据以及查询
 - https://senliangpi.github.io/demo/tree/tree.html
 #### 使用摄像头

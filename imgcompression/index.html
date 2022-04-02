@@ -5,7 +5,7 @@
  * @Website: https://senliangpi.github.io/blog/#/
  * @Date: 2020-07-31 15:53:00
  * @LastEditors: Pi Patle
- * @LastEditTime: 2022-01-29 14:37:40
+ * @LastEditTime: 2022-03-03 15:14:20
 --> 
 
 <!DOCTYPE html>
@@ -21,9 +21,10 @@
 </head>
 
 <body>
-  <input id="fileId1" type="file" name="file" multiple="multiple" onchange="file(this)" />
-  <div id="pression"></div>
+  <input id="fileId1" type="file" name="file" multiple="multiple" onchange="file1(this)" />
+  <img id="pression" />
 </body>
+<script src="../js/model.umd.min.js"></script>
 <script>
   function getObjectURL(file) {
     var url = null;
@@ -36,46 +37,52 @@
     }
     return url;
   }
-  let Imgwidth,imgHeight;
-  function file(e){
-    for(let a in e.files){
-      // console.log(e.files[a])
-      var url = getObjectURL(e.files[a]);
-      var newImg=new Image();
-      newImg.src=url
-      newImg.onload = function(){
-        imgcompression(url, newImg.width, newImg.height)
-      };
-    }
-    
-  }
   let dom = document.getElementById('pression');
-  function imgcompression(url, width, height){
-    let proportion;
-    if(width > 1080 || height > 1080){
-      if(width > height){
-        proportion = width/1080
-      }else{
-        proportion = height/1080
-      }
-      var canvasDom = document.createElement('canvas');
-      canvasDom.width = width/proportion;
-      canvasDom.height = height/proportion;
-      // dom.appendChild(canvasDom)
-      var ctx = canvasDom.getContext("2d");
-      var img = new Image();
-      //需要平铺的图片
-      img.src = url;
-      img.onload = function (){
-        ctx.width = canvasDom.width;
-        ctx.height = canvasDom.height;
-        ctx.drawImage(this, 0, 0, ctx.width, ctx.height);
-        let newImages = new Image();
-        newImages.src=canvasDom.toDataURL("image/jpeg",0.9)
-        dom.appendChild(newImages)
-      }
+  // let Imgwidth,imgHeight;
+  function file1(e){
+    for(let a in e.files){
+      pictureCompression(e.files[a],1920).then((result) => {
+        dom.src = getObjectURL(result);
+      }).catch((err) => {
+      });
+      
+      // var url = getObjectURL(e.files[a]);
+      // var newImg=new Image();
+      // newImg.src=url
+      // newImg.onload = function(){
+      //   imgcompression(url, newImg.width, newImg.height)
+      // };
     }
   }
+    
+  // }
+  // let dom = document.getElementById('pression');
+  // function imgcompression(url, width, height){
+  //   let proportion;
+  //   if(width > 1080 || height > 1080){
+  //     if(width > height){
+  //       proportion = width/1080
+  //     }else{
+  //       proportion = height/1080
+  //     }
+  //     var canvasDom = document.createElement('canvas');
+  //     canvasDom.width = width/proportion;
+  //     canvasDom.height = height/proportion;
+  //     // dom.appendChild(canvasDom)
+  //     var ctx = canvasDom.getContext("2d");
+  //     var img = new Image();
+  //     //需要平铺的图片
+  //     img.src = url;
+  //     img.onload = function (){
+  //       ctx.width = canvasDom.width;
+  //       ctx.height = canvasDom.height;
+  //       ctx.drawImage(this, 0, 0, ctx.width, ctx.height);
+  //       let newImages = new Image();
+  //       newImages.src=canvasDom.toDataURL("image/jpeg",0.9)
+  //       dom.appendChild(newImages)
+  //     }
+  //   }
+  // }
   // let dom = document.getElementById('aaa');
   // var canvasDom = document.createElement('canvas');
   // canvasDom.width = dom.clientWidth;
