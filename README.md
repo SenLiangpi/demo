@@ -5,7 +5,7 @@
  * @Website: https://senliangpi.github.io/blog/#/
  * @Date: 2022-01-29 10:51:11
  * @LastEditors: Pi Patle
- * @LastEditTime: 2022-04-02 17:09:41
+ * @LastEditTime: 2023-01-03 17:21:11
 -->
 # 技术样式 Demo
 #### 图片压缩
@@ -42,3 +42,5 @@
 - https://senliangpi.github.io/demo/web_worker/index.html
 #### 测试 postMessage 数据传输，用于多 web 应用交互 测试
 - https://senliangpi.github.io/demo/iframe.html
+#### Icon
+- https://senliangpi.github.io/demo/icon
