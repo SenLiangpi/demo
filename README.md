@@ -5,9 +5,13 @@
  * @Website: https://senliangpi.github.io/blog/#/
  * @Date: 2022-01-29 10:51:11
  * @LastEditors: Pi Patle
- * @LastEditTime: 2023-01-03 17:21:11
+ * @LastEditTime: 2023-07-06 16:29:48
 -->
-# 技术样式 Demo
+# 测试
+#### 文字转语音
+- https://senliangpi.github.io/demo/audio/SpeechSynthesis.html
+- #### 语音转文字
+- https://senliangpi.github.io/demo/audio/WebSpeech.html
 #### 图片压缩
 - https://senliangpi.github.io/demo/imgcompression/index.html
 #### indexedDB 测试
