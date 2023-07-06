@@ -5,7 +5,7 @@
  * @Website: https://senliangpi.github.io/blog/#/
  * @Date: 2023-07-05 14:32:56
  * @LastEditors: Pi Patle
- * @LastEditTime: 2023-07-06 17:07:00
+ * @LastEditTime: 2023-07-06 17:15:25
 -->
 <!DOCTYPE html>
 <html>
@@ -54,14 +54,15 @@
             console.log(event)
             const transcript = event.results[event.results.length - 1][0].transcript;
             console.log('Recognized speech:', transcript);
-            container.innerText = transcript;
+            container.innerText += '-/分割线/-' + transcript;
           };
   
-          recognition.onend = function() {
+          recognition.onend = function(event) {
+            console.log(event)
             console.log('Recognition ended');
             startButton.disabled = false;
             stopButton.disabled = true;
-            container.innerText = '';
+            // container.innerText = '';
           };
   
           recognition.onerror = function(event) {
@@ -83,7 +84,7 @@
       console.log('Recognition stopped');
       startButton.disabled = false;
       stopButton.disabled = true;
-      container.innerText = '';
+      // container.innerText = '';
     }
   </script>
 </body>
