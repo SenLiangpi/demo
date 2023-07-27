@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>经销商出入网-选中效果</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="客源列表" transform="translate(-24.000000, -931.000000)">
+            <g id="编组" transform="translate(0.000000, 79.000000)">
+                <g id="经销商出入网-选中效果" transform="translate(24.000000, 852.000000)">
+                    <rect id="Rectangle-47" x="0" y="0" width="14" height="14"></rect>
+                    <g id="编组" transform="translate(1.000000, 2.000000)" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.02857143">
+                        <polyline id="路径" points="2.92307692 5.5753276 0.153846154 8.2876638 2.92307692 11"></polyline>
+                        <line x1="0.153846154" y1="8.29019532" x2="5.53846154" y2="8.29019532" id="路径"></line>
+                        <polyline id="路径" points="9.07707692 3.16439223 11.8463077 5.87672843 9.07707692 8.58906463"></polyline>
+                        <line x1="11.8461538" y1="5.87925994" x2="6.46153846" y2="5.87925994" id="路径"></line>
+                        <polyline id="路径" points="0 4.97261636 0 0 12 0 12 2.26028017"></polyline>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
