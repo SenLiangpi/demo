@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <title>Auto Play Video</title>
+  <style>
+    *{margin:0;padding: 0;}
+    video {
+      width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <video autoplay muted controls name="media" id="video2">
+    <source src="https://vjs.zencdn.net/v/oceans.mp4" type="video/mp4">
+  </video>
+  <div style="height: 200px;"></div>
+  <div style="height: 200px;"></div>
+  <div style="height: 200px;"></div>
+  <div style="height: 200px;"></div>
+  <div style="height: 200px;"></div>
+  <div style="height: 200px;"></div>
+  <div style="height: 200px;"></div>
+  <div id="video-container">
+    <video controls name="media" id="video">
+      <source src="https://vjs.zencdn.net/v/oceans.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div style="height: 200px;"></div>
+  <script>
+    const video2 = document.getElementById('video2');
+    const video = document.getElementById('video');
+    const availHeight = window.screen.availHeight;
+    window.onload = function() {
+      video2.play();
+    };
+    // 监听滚动事件
+    window.addEventListener('scroll', function() {
+      if (isElementInViewport(video)) {
+        video.play(); // 视频完全出现在屏幕中时自动播放
+      } else {
+        video.pause(); // 视频完全不在屏幕显示范围内时暂停播放
+      }
+    });
+
+    // 判断元素是否在视口内
+    function isElementInViewport(el) {
+      const rect = el.getBoundingClientRect();
+      return (
+        rect.top >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)
+      );
+    }
+  </script>
+</body>
+</html>
