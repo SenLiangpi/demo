@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>星球地图生成器（柏林噪声高度图）</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      line-height: 1.4;
+    }
+    header {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(127,127,127,0.25);
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    header .group { display: flex; gap: 8px; align-items: center; }
+    label { font-size: 13px; opacity: 0.9; }
+    input[type="text"], select {
+      padding: 6px 8px;
+      border-radius: 8px;
+      border: 1px solid rgba(127,127,127,0.35);
+      background: transparent;
+      min-width: 160px;
+    }
+    input[type="range"] { width: 180px; }
+    button {
+      padding: 7px 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(127,127,127,0.35);
+      background: transparent;
+      cursor: pointer;
+    }
+    button:hover { background: rgba(127,127,127,0.12); }
+    main { padding: 12px 14px; }
+    .wrap {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    canvas {
+      width: min(1100px, 100%);
+      height: auto;
+      aspect-ratio: 2 / 1;
+      border-radius: 14px;
+      border: 1px solid rgba(127,127,127,0.35);
+      background: rgba(127,127,127,0.08);
+      image-rendering: auto;
+    }
+    .status {
+      font-size: 12px;
+      opacity: 0.85;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="group">
+      <label for="seed">Seed</label>
+      <input id="seed" type="text" placeholder="例如: earth-001" />
+    </div>
+
+    <div class="group">
+      <label for="sea">海平面</label>
+      <input id="sea" type="range" min="0" max="100" value="52" />
+      <span id="seaValue" class="mono">0.52</span>
+    </div>
+
+    <div class="group">
+      <label for="mode">视图</label>
+      <select id="mode">
+        <option value="color" selected>彩色地形</option>
+        <option value="height">灰度高度</option>
+      </select>
+    </div>
+
+    <button id="regen">重新生成</button>
+    <button id="random">随机 Seed</button>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <canvas id="map" width="1024" height="512" aria-label="planet map canvas"></canvas>
+      <div class="status">
+        <span>分辨率: <span class="mono">1024×512</span></span>
+        <span>耗时: <span id="time" class="mono">-</span></span>
+        <span>范围: <span id="range" class="mono">-</span></span>
+      </div>
+    </div>
+  </main>
+
+  <script src="planet.js"></script>
+</body>
+</html>

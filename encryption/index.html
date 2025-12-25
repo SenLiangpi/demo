@@ -1,0 +1,983 @@
+<!--
+ * @Author: Pi Patle
+ * @Email: pisenliang@gmail.com
+ * @Github: https://github.com/SenLiangpi
+ * @Date: 2025-12-24
+ * @LastEditors: Pi Patle
+ * @LastEditTime: 2025-12-24
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>专业加密工具 - Professional Encryption Tool</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <style>
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px 0;
+    }
+
+    .container-main {
+      max-width: 1000px;
+      margin: 50px auto;
+      background: white;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+      text-align: center;
+      color: #667eea;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #999;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+
+    .form-control {
+      border-radius: 8px;
+      border: 2px solid #e0e0e0;
+      transition: all 0.3s;
+    }
+
+    .form-control:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+
+    textarea.form-control {
+      min-height: 150px;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+    }
+
+    .btn-custom {
+      border-radius: 8px;
+      padding: 10px 30px;
+      font-weight: bold;
+      transition: all 0.3s;
+      margin: 5px;
+    }
+
+    .btn-encrypt {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      color: white;
+    }
+
+    .btn-encrypt:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-decrypt {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      border: none;
+      color: white;
+    }
+
+    .btn-decrypt:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+    }
+
+    .btn-copy {
+      background: #28a745;
+      border: none;
+      color: white;
+    }
+
+    .btn-copy:hover {
+      background: #218838;
+      transform: translateY(-2px);
+    }
+
+    .btn-clear {
+      background: #6c757d;
+      border: none;
+      color: white;
+    }
+
+    .btn-clear:hover {
+      background: #5a6268;
+    }
+
+    .result-section {
+      margin-top: 30px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 10px;
+      border: 2px solid #e0e0e0;
+    }
+
+    .result-label {
+      font-weight: bold;
+      color: #667eea;
+      margin-bottom: 10px;
+    }
+
+    .result-text {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      word-break: break-all;
+      min-height: 100px;
+      border: 1px solid #ddd;
+    }
+
+    .algorithm-info {
+      background: #e3f2fd;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+      font-size: 13px;
+      color: #1976d2;
+    }
+
+    .algorithm-info strong {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+
+    .button-group {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .alert-custom {
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+
+    .tab-content {
+      margin-top: 20px;
+    }
+
+    .nav-tabs > li.active > a {
+      background: #667eea !important;
+      color: white !important;
+      border-color: #667eea !important;
+    }
+
+    .nav-tabs > li > a {
+      border-radius: 8px 8px 0 0;
+      margin-right: 5px;
+    }
+
+    .file-upload-area {
+      border: 3px dashed #667eea;
+      border-radius: 10px;
+      padding: 40px;
+      text-align: center;
+      background: #f8f9fa;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .file-upload-area:hover {
+      background: #e7f1ff;
+      border-color: #5568d3;
+    }
+
+    .file-upload-area.drag-over {
+      background: #d4e5ff;
+      border-color: #4557c2;
+    }
+
+    .file-info {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+      border: 1px solid #ddd;
+    }
+
+    .file-icon {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+
+    .key-strength-meter {
+      margin-top: 8px;
+      height: 8px;
+      background: #e0e0e0;
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .key-strength-bar {
+      height: 100%;
+      transition: all 0.3s;
+      border-radius: 4px;
+    }
+
+    .strength-weak { background: linear-gradient(90deg, #ff4444, #ff6666); width: 25%; }
+    .strength-medium { background: linear-gradient(90deg, #ff9800, #ffb74d); width: 50%; }
+    .strength-good { background: linear-gradient(90deg, #2196f3, #64b5f6); width: 75%; }
+    .strength-strong { background: linear-gradient(90deg, #4caf50, #81c784); width: 100%; }
+
+    .key-strength-info {
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      display: none;
+    }
+
+    .strength-info-weak {
+      background: #ffebee;
+      border: 1px solid #ffcdd2;
+      color: #c62828;
+    }
+
+    .strength-info-medium {
+      background: #fff3e0;
+      border: 1px solid #ffe0b2;
+      color: #e65100;
+    }
+
+    .strength-info-good {
+      background: #e3f2fd;
+      border: 1px solid #bbdefb;
+      color: #1565c0;
+    }
+
+    .strength-info-strong {
+      background: #e8f5e9;
+      border: 1px solid #c8e6c9;
+      color: #2e7d32;
+    }
+
+    .crack-time {
+      font-weight: bold;
+      font-size: 14px;
+      margin: 8px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container-main">
+    <h1>🔐 专业加密工具</h1>
+    <p class="subtitle">Professional Encryption Tool - AES 军事级加密</p>
+
+    <!-- Tab 导航 -->
+    <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active">
+        <a href="#textTab" aria-controls="textTab" role="tab" data-toggle="tab">📝 文本加密</a>
+      </li>
+      <li role="presentation">
+        <a href="#fileTab" aria-controls="fileTab" role="tab" data-toggle="tab">📁 文件加密</a>
+      </li>
+    </ul>
+
+    <!-- Tab 内容 -->
+    <div class="tab-content">
+      <!-- 文本加密 Tab -->
+      <div role="tabpanel" class="tab-pane active" id="textTab">
+        <div class="row" style="margin-top: 20px;">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="algorithm">加密算法 (Encryption Algorithm)</label>
+              <select class="form-control" id="algorithm">
+                <option value="aes-256" selected>AES-256-CBC (推荐 - 军事级加密)</option>
+                <option value="aes-192">AES-192-CBC (高强度加密)</option>
+                <option value="aes-128">AES-128-CTR (标准加密)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="secretKey">密钥 (Secret Key) <span class="text-danger">*必填</span></label>
+              <input type="password" class="form-control" id="secretKey" placeholder="请输入强密钥（建议16位以上，包含大小写字母、数字和特殊字符）">
+              <div class="key-strength-meter">
+                <div class="key-strength-bar" id="keyStrengthBar"></div>
+              </div>
+              <div class="key-strength-info" id="keyStrengthInfo"></div>
+              <small class="text-muted">💡 提示：密钥越复杂越安全，务必妥善保管密钥</small>
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="inputText">输入文本 (Input Text)</label>
+              <textarea class="form-control" id="inputText" placeholder="请输入需要加密的文本内容..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="button-group">
+          <button type="button" class="btn btn-custom btn-encrypt" id="encryptBtn">
+            🔒 加密 (Encrypt)
+          </button>
+          <button type="button" class="btn btn-custom btn-decrypt" id="decryptBtn">
+            🔓 解密 (Decrypt)
+          </button>
+          <button type="button" class="btn btn-custom btn-copy" id="copyBtn">
+            📋 复制结果 (Copy)
+          </button>
+          <button type="button" class="btn btn-custom btn-clear" id="clearBtn">
+            🗑️ 清空 (Clear)
+          </button>
+        </div>
+
+        <div class="result-section" id="resultSection" style="display:none;">
+          <div class="result-label">处理结果 (Result):</div>
+          <div class="result-text" id="resultText"></div>
+        </div>
+      </div>
+
+      <!-- 文件加密 Tab -->
+      <div role="tabpanel" class="tab-pane" id="fileTab">
+        <div class="row" style="margin-top: 20px;">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="fileAlgorithm">加密算法 (Encryption Algorithm)</label>
+              <select class="form-control" id="fileAlgorithm">
+                <option value="aes-256" selected>AES-256-CBC (推荐)</option>
+                <option value="aes-192">AES-192-CBC</option>
+                <option value="aes-128">AES-128-CTR</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="fileSecretKey">密钥 (Secret Key) <span class="text-danger">*必填</span></label>
+              <input type="password" class="form-control" id="fileSecretKey" placeholder="请输入强密钥">
+              <div class="key-strength-meter">
+                <div class="key-strength-bar" id="fileKeyStrengthBar"></div>
+              </div>
+              <div class="key-strength-info" id="fileKeyStrengthInfo"></div>
+              <small class="text-muted">⚠️ 解密时必须使用相同密钥</small>
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <input type="file" id="fileInput" style="display:none;" accept=".md,.txt,.encrypted">
+            <div class="file-upload-area" id="fileUploadArea">
+              <div class="file-icon">📄</div>
+              <h4>拖拽文件到此处或点击选择</h4>
+              <p class="text-muted">支持 .md, .txt 等文本文件</p>
+            </div>
+            <div class="file-info" id="fileInfo" style="display:none;">
+              <strong>文件信息:</strong>
+              <div id="fileDetails"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="button-group">
+          <button type="button" class="btn btn-custom btn-encrypt" id="encryptFileBtn">
+            🔒 加密文件 (Encrypt File)
+          </button>
+          <button type="button" class="btn btn-custom btn-decrypt" id="decryptFileBtn">
+            🔓 解密文件 (Decrypt File)
+          </button>
+          <button type="button" class="btn btn-custom btn-clear" id="clearFileBtn">
+            🗑️ 清空 (Clear)
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="algorithm-info">
+      <strong id="algoTitle">AES-256-CBC 加密算法 + PBKDF2</strong>
+      <div id="algoDescription">
+        AES-256-CBC 采用256位密钥和密码块链接模式，结合PBKDF2密钥派生函数（10000次迭代）和随机IV/Salt，提供军事级安全保护，广泛应用于金融、军事等高安全场景。
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
+  <script>
+    // 算法描述信息
+    const algoInfo = {
+      'aes-256': {
+        title: 'AES-256-CBC 加密算法 + PBKDF2',
+        description: 'AES-256-CBC 采用256位密钥和密码块链接模式，结合PBKDF2密钥派生函数（10000次迭代）和随机IV/Salt，提供军事级安全保护，广泛应用于金融、军事等高安全场景。'
+      },
+      'aes-192': {
+        title: 'AES-192-CBC 加密算法',
+        description: 'AES-192-CBC 使用192位密钥和密码块链接模式，提供高强度加密，适用于企业级数据保护。'
+      },
+      'aes-128': {
+        title: 'AES-128-CTR 加密算法',
+        description: 'AES-128-CTR 使用128位密钥和计数器模式，加密速度快，安全性高，适合大量数据加密。'
+      }
+    };
+
+    let currentFile = null;
+    let currentFileContent = null;
+
+    // 密钥强度检测函数
+    function checkKeyStrength(key) {
+      if (!key) return { strength: 'none', level: 0 };
+      
+      let score = 0;
+      let details = {
+        length: key.length,
+        hasLower: /[a-z]/.test(key),
+        hasUpper: /[A-Z]/.test(key),
+        hasNumber: /[0-9]/.test(key),
+        hasSpecial: /[^a-zA-Z0-9]/.test(key)
+      };
+      
+      // 长度评分
+      if (details.length >= 32) score += 40;
+      else if (details.length >= 24) score += 35;
+      else if (details.length >= 16) score += 25;
+      else if (details.length >= 12) score += 15;
+      else if (details.length >= 8) score += 10;
+      else score += 5;
+      
+      // 字符类型评分
+      if (details.hasLower) score += 10;
+      if (details.hasUpper) score += 10;
+      if (details.hasNumber) score += 15;
+      if (details.hasSpecial) score += 25;
+      
+      // 计算可能的组合空间（位数）
+      let charSpace = 0;
+      if (details.hasLower) charSpace += 26;
+      if (details.hasUpper) charSpace += 26;
+      if (details.hasNumber) charSpace += 10;
+      if (details.hasSpecial) charSpace += 32;
+      
+      // 计算总可能性（对数形式避免溢出）
+      const entropy = details.length * Math.log2(charSpace);
+      
+      // 估算破解时间（假设每秒100亿次尝试）
+      const combinations = Math.pow(2, entropy);
+      const secondsToBreak = combinations / 10000000000; // 100亿次/秒
+      
+      let timeStr = '';
+      if (secondsToBreak < 60) {
+        timeStr = '不到1分钟';
+      } else if (secondsToBreak < 3600) {
+        timeStr = Math.round(secondsToBreak / 60) + '分钟';
+      } else if (secondsToBreak < 86400) {
+        timeStr = Math.round(secondsToBreak / 3600) + '小时';
+      } else if (secondsToBreak < 31536000) {
+        timeStr = Math.round(secondsToBreak / 86400) + '天';
+      } else if (secondsToBreak < 31536000000) {
+        timeStr = Math.round(secondsToBreak / 31536000) + '年';
+      } else if (secondsToBreak < 31536000000000) {
+        timeStr = Math.round(secondsToBreak / 31536000000) + '千年';
+      } else if (secondsToBreak < 31536000000000000) {
+        timeStr = Math.round(secondsToBreak / 31536000000000) + '百万年';
+      } else {
+        const universeAge = secondsToBreak / (13.8 * 1000000000 * 31536000);
+        if (universeAge > 1000000000000) {
+          timeStr = '事实上不可能破解（需要宇宙年龄的数万亿倍时间）';
+        } else if (universeAge > 1000000) {
+          timeStr = universeAge.toExponential(2) + ' 倍宇宙年龄';
+        } else {
+          timeStr = Math.round(universeAge) + ' 倍宇宙年龄';
+        }
+      }
+      
+      let strength, level, message, recommendation;
+      
+      if (score < 30) {
+        strength = 'weak';
+        level = 1;
+        message = '⚠️ 密钥强度：极弱';
+        recommendation = '建议增加长度到16位以上，并包含大小写字母、数字和特殊字符';
+      } else if (score < 50) {
+        strength = 'medium';
+        level = 2;
+        message = '⚡ 密钥强度：中等';
+        recommendation = '建议增加到24位以上，并确保包含所有类型字符以提高安全性';
+      } else if (score < 75) {
+        strength = 'good';
+        level = 3;
+        message = '✅ 密钥强度：良好';
+        recommendation = '达到基本安全要求，建议增加到32位以获得更高安全性';
+      } else {
+        strength = 'strong';
+        level = 4;
+        message = '🛡️ 密钥强度：极强';
+        recommendation = '优秀！这是军事级安全强度，足以保护高度敏感信息';
+      }
+      
+      return {
+        strength,
+        level,
+        score,
+        message,
+        recommendation,
+        timeStr,
+        entropy: Math.round(entropy),
+        details
+      };
+    }
+
+    // 更新密钥强度显示
+    function updateKeyStrength(key, barId, infoId) {
+      const result = checkKeyStrength(key);
+      const bar = $('#' + barId);
+      const info = $('#' + infoId);
+      
+      // 移除所有强度类
+      bar.removeClass('strength-weak strength-medium strength-good strength-strong');
+      info.removeClass('strength-info-weak strength-info-medium strength-info-good strength-info-strong');
+      
+      if (!key) {
+        bar.css('width', '0');
+        info.hide();
+        return;
+      }
+      
+      // 添加对应强度类
+      bar.addClass('strength-' + result.strength);
+      info.addClass('strength-info-' + result.strength);
+      
+      // 更新信息
+      let html = `
+        <div><strong>${result.message}</strong></div>
+        <div class="crack-time">💻 暴力破解时间：${result.timeStr}</div>
+        <div>📊 密钥熵值：${result.entropy} 比特</div>
+        <div>📏 字符类型：长度${result.details.length} | 
+          ${result.details.hasLower ? '✓小写' : '✗小写'} | 
+          ${result.details.hasUpper ? '✓大写' : '✗大写'} | 
+          ${result.details.hasNumber ? '✓数字' : '✗数字'} | 
+          ${result.details.hasSpecial ? '✓特殊符号' : '✗特殊符号'}
+        </div>
+        <div style="margin-top: 8px;">💡 ${result.recommendation}</div>
+      `;
+      
+      info.html(html).show();
+    }
+
+    // AES-256 加密 (使用CBC模式 + PBKDF2密钥派生)
+    function aes256Encrypt(text, key) {
+      if (!key || key.length < 8) {
+        throw new Error('密钥长度至少需要8位字符');
+      }
+      // 生成随机盐和IV
+      const salt = CryptoJS.lib.WordArray.random(128/8);
+      const iv = CryptoJS.lib.WordArray.random(128/8);
+      
+      // 使用PBKDF2从密钥派生256位加密密钥
+      const derivedKey = CryptoJS.PBKDF2(key, salt, {
+        keySize: 256/32,
+        iterations: 10000
+      });
+      
+      const encrypted = CryptoJS.AES.encrypt(text, derivedKey, {
+        iv: iv,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7
+      });
+      
+      // 将salt + iv + ciphertext组合返回
+      const result = salt.toString() + iv.toString() + encrypted.toString();
+      return result;
+    }
+
+    function aes256Decrypt(ciphertext, key) {
+      if (!key) throw new Error('请输入密钥');
+      try {
+        // 提取salt (32字符), iv (32字符), 和密文
+        const salt = CryptoJS.enc.Hex.parse(ciphertext.substr(0, 32));
+        const iv = CryptoJS.enc.Hex.parse(ciphertext.substr(32, 32));
+        const encrypted = ciphertext.substring(64);
+        
+        // 使用相同参数派生密钥
+        const derivedKey = CryptoJS.PBKDF2(key, salt, {
+          keySize: 256/32,
+          iterations: 10000
+        });
+        
+        const decrypted = CryptoJS.AES.decrypt(encrypted, derivedKey, {
+          iv: iv,
+          mode: CryptoJS.mode.CBC,
+          padding: CryptoJS.pad.Pkcs7
+        });
+        
+        const text = decrypted.toString(CryptoJS.enc.Utf8);
+        if (!text) throw new Error('解密失败');
+        return text;
+      } catch (e) {
+        throw new Error('解密失败，请检查密钥是否正确');
+      }
+    }
+
+    // AES-192 加密
+    function aes192Encrypt(text, key) {
+      if (!key || key.length < 8) {
+        throw new Error('密钥长度至少需要8位字符');
+      }
+      const encrypted = CryptoJS.AES.encrypt(text, key, {
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7
+      });
+      return encrypted.toString();
+    }
+
+    function aes192Decrypt(ciphertext, key) {
+      if (!key) throw new Error('请输入密钥');
+      try {
+        const decrypted = CryptoJS.AES.decrypt(ciphertext, key, {
+          mode: CryptoJS.mode.CBC,
+          padding: CryptoJS.pad.Pkcs7
+        });
+        const text = decrypted.toString(CryptoJS.enc.Utf8);
+        if (!text) throw new Error('解密失败');
+        return text;
+      } catch (e) {
+        throw new Error('解密失败，请检查密钥是否正确');
+      }
+    }
+
+    // AES-128 加密
+    function aes128Encrypt(text, key) {
+      if (!key || key.length < 8) {
+        throw new Error('密钥长度至少需要8位字符');
+      }
+      const encrypted = CryptoJS.AES.encrypt(text, key, {
+        mode: CryptoJS.mode.CTR,
+        padding: CryptoJS.pad.NoPadding
+      });
+      return encrypted.toString();
+    }
+
+    function aes128Decrypt(ciphertext, key) {
+      if (!key) throw new Error('请输入密钥');
+      try {
+        const decrypted = CryptoJS.AES.decrypt(ciphertext, key, {
+          mode: CryptoJS.mode.CTR,
+          padding: CryptoJS.pad.NoPadding
+        });
+        const text = decrypted.toString(CryptoJS.enc.Utf8);
+        if (!text) throw new Error('解密失败');
+        return text;
+      } catch (e) {
+        throw new Error('解密失败，请检查密钥是否正确');
+      }
+    }
+
+    // 更新UI
+    function updateAlgorithmInfo() {
+      const algo = $('#algorithm').val();
+      const info = algoInfo[algo];
+      $('#algoTitle').text(info.title);
+      $('#algoDescription').text(info.description);
+    }
+
+    // 文本加密
+    $('#encryptBtn').on('click', function() {
+      try {
+        const text = $('#inputText').val();
+        if (!text) {
+          alert('请输入要加密的文本');
+          return;
+        }
+
+        const algo = $('#algorithm').val();
+        const key = $('#secretKey').val();
+        
+        if (!key) {
+          alert('请输入密钥');
+          return;
+        }
+
+        let result = '';
+        switch (algo) {
+          case 'aes-256':
+            result = aes256Encrypt(text, key);
+            break;
+          case 'aes-192':
+            result = aes192Encrypt(text, key);
+            break;
+          case 'aes-128':
+            result = aes128Encrypt(text, key);
+            break;
+        }
+
+        $('#resultText').text(result);
+        $('#resultSection').fadeIn();
+      } catch (error) {
+        alert('加密失败：' + error.message);
+      }
+    });
+
+    // 文本解密
+    $('#decryptBtn').on('click', function() {
+      try {
+        const text = $('#inputText').val();
+        if (!text) {
+          alert('请输入要解密的文本');
+          return;
+        }
+
+        const algo = $('#algorithm').val();
+        const key = $('#secretKey').val();
+        
+        if (!key) {
+          alert('请输入密钥');
+          return;
+        }
+
+        let result = '';
+        switch (algo) {
+          case 'aes-256':
+            result = aes256Decrypt(text, key);
+            break;
+          case 'aes-192':
+            result = aes192Decrypt(text, key);
+            break;
+          case 'aes-128':
+            result = aes128Decrypt(text, key);
+            break;
+        }
+
+        $('#resultText').text(result);
+        $('#resultSection').fadeIn();
+      } catch (error) {
+        alert('解密失败：' + error.message);
+      }
+    });
+
+    // 复制结果
+    $('#copyBtn').on('click', function() {
+      const result = $('#resultText').text();
+      if (!result) {
+        alert('没有可复制的内容');
+        return;
+      }
+
+      navigator.clipboard.writeText(result).then(function() {
+        const originalText = $('#copyBtn').text();
+        $('#copyBtn').text('✅ 已复制！');
+        setTimeout(function() {
+          $('#copyBtn').text(originalText);
+        }, 2000);
+      }).catch(function() {
+        const textarea = document.createElement('textarea');
+        textarea.value = result;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        alert('已复制到剪贴板！');
+      });
+    });
+
+    // 清空文本
+    $('#clearBtn').on('click', function() {
+      $('#inputText').val('');
+      $('#resultText').text('');
+      $('#resultSection').fadeOut();
+      $('#secretKey').val('');
+    });
+
+    // 文件上传处理
+    $('#fileUploadArea').on('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      $('#fileInput').trigger('click');
+    });
+
+    $('#fileInput').on('change', function(e) {
+      handleFileSelect(e.target.files[0]);
+    });
+
+    // 拖拽上传
+    const fileUploadArea = document.getElementById('fileUploadArea');
+    
+    fileUploadArea.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      $(this).addClass('drag-over');
+    });
+
+    fileUploadArea.addEventListener('dragleave', function(e) {
+      e.preventDefault();
+      $(this).removeClass('drag-over');
+    });
+
+    fileUploadArea.addEventListener('drop', function(e) {
+      e.preventDefault();
+      $(this).removeClass('drag-over');
+      const file = e.dataTransfer.files[0];
+      handleFileSelect(file);
+    });
+
+    function handleFileSelect(file) {
+      if (!file) return;
+
+      const validTypes = ['.md', '.txt', '.encrypted'];
+      const fileName = file.name.toLowerCase();
+      const isValid = validTypes.some(type => fileName.endsWith(type));
+
+      if (!isValid) {
+        alert('只支持 .md、.txt 和 .encrypted 文件！');
+        return;
+      }
+
+      currentFile = file;
+      const reader = new FileReader();
+      
+      reader.onload = function(e) {
+        currentFileContent = e.target.result;
+        $('#fileDetails').html(`
+          <p><strong>文件名:</strong> ${file.name}</p>
+          <p><strong>文件大小:</strong> ${(file.size / 1024).toFixed(2)} KB</p>
+          <p><strong>文件类型:</strong> ${file.type || 'text/plain'}</p>
+        `);
+        $('#fileInfo').fadeIn();
+      };
+
+      reader.readAsText(file);
+    }
+
+    // 加密文件
+    $('#encryptFileBtn').on('click', function() {
+      try {
+        if (!currentFile || !currentFileContent) {
+          alert('请先选择要加密的文件');
+          return;
+        }
+
+        const key = $('#fileSecretKey').val();
+        if (!key) {
+          alert('请输入密钥');
+          return;
+        }
+
+        const algo = $('#fileAlgorithm').val();
+        let encrypted = '';
+
+        switch (algo) {
+          case 'aes-256':
+            encrypted = aes256Encrypt(currentFileContent, key);
+            break;
+          case 'aes-192':
+            encrypted = aes192Encrypt(currentFileContent, key);
+            break;
+          case 'aes-128':
+            encrypted = aes128Encrypt(currentFileContent, key);
+            break;
+        }
+
+        // 下载加密文件
+        const blob = new Blob([encrypted], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = currentFile.name + '.encrypted';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        alert('文件加密成功！已下载加密文件');
+      } catch (error) {
+        alert('加密失败：' + error.message);
+      }
+    });
+
+    // 解密文件
+    $('#decryptFileBtn').on('click', function() {
+      try {
+        if (!currentFile || !currentFileContent) {
+          alert('请先选择要解密的文件');
+          return;
+        }
+
+        const key = $('#fileSecretKey').val();
+        if (!key) {
+          alert('请输入密钥');
+          return;
+        }
+
+        const algo = $('#fileAlgorithm').val();
+        let decrypted = '';
+
+        switch (algo) {
+          case 'aes-256':
+            decrypted = aes256Decrypt(currentFileContent, key);
+            break;
+          case 'aes-192':
+            decrypted = aes192Decrypt(currentFileContent, key);
+            break;
+          case 'aes-128':
+            decrypted = aes128Decrypt(currentFileContent, key);
+            break;
+        }
+
+        // 下载解密文件
+        const blob = new Blob([decrypted], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        
+        // 移除 .encrypted 后缀
+        let fileName = currentFile.name;
+        if (fileName.endsWith('.encrypted')) {
+          fileName = fileName.slice(0, -10);
+        } else {
+          fileName = fileName + '.decrypted';
+        }
+        
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        alert('文件解密成功！已下载解密文件');
+      } catch (error) {
+        alert('解密失败：' + error.message);
+      }
+    });
+
+    // 清空文件
+    $('#clearFileBtn').on('click', function() {
+      currentFile = null;
+      currentFileContent = null;
+      $('#fileInput').val('');
+      $('#fileInfo').fadeOut();
+      $('#fileSecretKey').val('');
+    });
+
+    // 算法切换
+    $('#algorithm').on('change', updateAlgorithmInfo);
+
+    // 密钥强度实时检测
+    $('#secretKey').on('input', function() {
+      updateKeyStrength($(this).val(), 'keyStrengthBar', 'keyStrengthInfo');
+    });
+
+    $('#fileSecretKey').on('input', function() {
+      updateKeyStrength($(this).val(), 'fileKeyStrengthBar', 'fileKeyStrengthInfo');
+    });
+
+    // 初始化
+    updateAlgorithmInfo();
+  </script>
+</body>
+
+</html>
