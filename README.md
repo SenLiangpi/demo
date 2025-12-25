@@ -48,3 +48,7 @@
 - https://senliangpi.github.io/demo/iframe.html
 #### Icon
 - https://senliangpi.github.io/demo/icon
+#### 加密解密工具
+- https://senliangpi.github.io/demo/encryption/index.html
+### 星球地图生成器（柏林噪声高度图）
+- https://senliangpi.github.io/demo/planet_noise_map/index.html
