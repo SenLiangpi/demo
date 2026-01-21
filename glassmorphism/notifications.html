@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>玻璃态通知卡片</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateX(-5px);
+        }
+
+        h1 {
+            color: white;
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .trigger-button {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .trigger-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .notifications-stack {
+            position: relative;
+        }
+
+        .notification {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 15px;
+            position: relative;
+            overflow: hidden;
+            animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
+        }
+
+        .notification::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.5), 
+                transparent);
+        }
+
+        .notification:hover {
+            transform: translateX(5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .notification-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .notification-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .notification-title {
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .notification-time {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .notification-message {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .notification-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .notification-action {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .notification-action:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .notification-action.primary {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .close-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.2s ease;
+        }
+
+        .notification:hover .close-button {
+            opacity: 1;
+        }
+
+        .close-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        /* 不同类型的通知 */
+        .notification.success .notification-icon {
+            background: rgba(76, 217, 100, 0.3);
+        }
+
+        .notification.warning .notification-icon {
+            background: rgba(255, 204, 0, 0.3);
+        }
+
+        .notification.error .notification-icon {
+            background: rgba(255, 59, 48, 0.3);
+        }
+
+        .notification.info .notification-icon {
+            background: rgba(0, 122, 255, 0.3);
+        }
+
+        /* 展开的通知 */
+        .notification.expanded {
+            padding-right: 60px;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 32px;
+            }
+
+            .button-group {
+                flex-wrap: wrap;
+            }
+
+            .notification {
+                padding-right: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="index.html" class="back-button">← 返回首页</a>
+            <h1>通知卡片</h1>
+            <p class="subtitle">iOS 风格的玻璃态通知</p>
+        </div>
+
+        <div class="button-group">
+            <button class="trigger-button" onclick="addNotification('success')">成功通知</button>
+            <button class="trigger-button" onclick="addNotification('warning')">警告通知</button>
+            <button class="trigger-button" onclick="addNotification('error')">错误通知</button>
+            <button class="trigger-button" onclick="addNotification('info')">信息通知</button>
+        </div>
+
+        <div class="notifications-stack" id="notificationsStack">
+            <!-- 默认通知示例 -->
+            <div class="notification success expanded">
+                <div class="notification-icon">✓</div>
+                <div class="notification-content">
+                    <div class="notification-header">
+                        <div>
+                            <div class="notification-title">操作成功</div>
+                            <div class="notification-time">刚刚</div>
+                        </div>
+                    </div>
+                    <div class="notification-message">
+                        您的文件已成功上传到云端，可以在任何设备上访问。
+                    </div>
+                    <div class="notification-actions">
+                        <button class="notification-action primary">查看</button>
+                        <button class="notification-action">关闭</button>
+                    </div>
+                </div>
+                <button class="close-button" onclick="removeNotification(this)">×</button>
+            </div>
+
+            <div class="notification info expanded">
+                <div class="notification-icon">ℹ️</div>
+                <div class="notification-content">
+                    <div class="notification-header">
+                        <div>
+                            <div class="notification-title">系统更新</div>
+                            <div class="notification-time">5分钟前</div>
+                        </div>
+                    </div>
+                    <div class="notification-message">
+                        有新的系统更新可用，建议您在空闲时间进行更新。
+                    </div>
+                    <div class="notification-actions">
+                        <button class="notification-action primary">立即更新</button>
+                        <button class="notification-action">稍后提醒</button>
+                    </div>
+                </div>
+                <button class="close-button" onclick="removeNotification(this)">×</button>
+            </div>
+
+            <div class="notification warning expanded">
+                <div class="notification-icon">⚠️</div>
+                <div class="notification-content">
+                    <div class="notification-header">
+                        <div>
+                            <div class="notification-title">存储空间不足</div>
+                            <div class="notification-time">1小时前</div>
+                        </div>
+                    </div>
+                    <div class="notification-message">
+                        您的存储空间仅剩 5%，请清理不必要的文件。
+                    </div>
+                    <div class="notification-actions">
+                        <button class="notification-action primary">管理存储</button>
+                        <button class="notification-action">忽略</button>
+                    </div>
+                </div>
+                <button class="close-button" onclick="removeNotification(this)">×</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const notificationTypes = {
+            success: {
+                icon: '✓',
+                title: '操作成功',
+                message: '您的操作已成功完成。',
+                actions: ['确定', '查看详情']
+            },
+            warning: {
+                icon: '⚠️',
+                title: '警告',
+                message: '请注意，这可能会影响系统性能。',
+                actions: ['知道了', '查看']
+            },
+            error: {
+                icon: '✕',
+                title: '操作失败',
+                message: '抱歉，操作失败，请稍后重试。',
+                actions: ['重试', '取消']
+            },
+            info: {
+                icon: 'ℹ️',
+                title: '提示信息',
+                message: '这是一条重要的提示信息。',
+                actions: ['了解', '关闭']
+            }
+        };
+
+        function addNotification(type) {
+            const stack = document.getElementById('notificationsStack');
+            const config = notificationTypes[type];
+            
+            const notification = document.createElement('div');
+            notification.className = `notification ${type} expanded`;
+            notification.innerHTML = `
+                <div class="notification-icon">${config.icon}</div>
+                <div class="notification-content">
+                    <div class="notification-header">
+                        <div>
+                            <div class="notification-title">${config.title}</div>
+                            <div class="notification-time">刚刚</div>
+                        </div>
+                    </div>
+                    <div class="notification-message">${config.message}</div>
+                    <div class="notification-actions">
+                        <button class="notification-action primary">${config.actions[0]}</button>
+                        <button class="notification-action">${config.actions[1]}</button>
+                    </div>
+                </div>
+                <button class="close-button" onclick="removeNotification(this)">×</button>
+            `;
+            
+            stack.insertBefore(notification, stack.firstChild);
+            
+            // 3秒后自动移除
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    removeNotification(notification.querySelector('.close-button'));
+                }
+            }, 5000);
+        }
+
+        function removeNotification(button) {
+            const notification = button.closest('.notification');
+            notification.style.animation = 'slideOut 0.3s ease forwards';
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 300);
+        }
+
+        // 添加滑出动画
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideOut {
+                to {
+                    opacity: 0;
+                    transform: translateX(100%);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // 为所有通知操作按钮添加点击事件
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('notification-action')) {
+                const notification = e.target.closest('.notification');
+                removeNotification(notification.querySelector('.close-button'));
+            }
+        });
+    </script>
+</body>
+</html>

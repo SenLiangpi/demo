@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>手机端 App Shell + Tabbar</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --glass-bg: rgba(255, 255, 255, 0.14);
+      --glass-strong: rgba(255, 255, 255, 0.18);
+      --glass-border: rgba(255, 255, 255, 0.24);
+      --text: rgba(255, 255, 255, 0.92);
+      --muted: rgba(255, 255, 255, 0.70);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', sans-serif;
+      background: radial-gradient(900px 600px at 10% 10%, rgba(255,255,255,0.14), transparent 60%),
+                  radial-gradient(900px 600px at 90% 20%, rgba(255,255,255,0.10), transparent 60%),
+                  linear-gradient(135deg, #4facfe 0%, #00f2fe 35%, #f093fb 100%);
+      min-height: 100vh;
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    .app {
+      min-height: 100vh;
+      padding-top: calc(14px + env(safe-area-inset-top));
+      padding-bottom: calc(86px + env(safe-area-inset-bottom));
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: rgba(255,255,255,0.10);
+      backdrop-filter: blur(22px) saturate(180%);
+      -webkit-backdrop-filter: blur(22px) saturate(180%);
+      border-bottom: 1px solid rgba(255,255,255,0.18);
+    }
+
+    .header a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.18);
+    }
+
+    .header-title {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.2px;
+    }
+
+    .content {
+      flex: 1;
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+      max-width: 480px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(26px) saturate(180%);
+      -webkit-backdrop-filter: blur(26px) saturate(180%);
+      border: 1px solid var(--glass-border);
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.14);
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -0.2px;
+    }
+
+    .card-sub {
+      margin-top: 6px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .pill {
+      flex: 1;
+      padding: 12px 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: white;
+      font-weight: 700;
+      font-size: 13px;
+      text-align: center;
+      user-select: none;
+    }
+
+    .pill:active { transform: scale(0.98); }
+
+    .tabbar {
+      position: fixed;
+      left: 16px;
+      right: 16px;
+      bottom: calc(12px + env(safe-area-inset-bottom));
+      height: 64px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.14);
+      backdrop-filter: blur(30px) saturate(180%);
+      -webkit-backdrop-filter: blur(30px) saturate(180%);
+      border: 1px solid rgba(255,255,255,0.24);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.18);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 8px 10px;
+      z-index: 20;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .tab {
+      flex: 1;
+      height: 100%;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      color: rgba(255,255,255,0.72);
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      user-select: none;
+    }
+
+    .tab .icon { font-size: 18px; }
+
+    .tab.active {
+      background: rgba(255,255,255,0.18);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.22);
+    }
+
+    .tab:active { transform: scale(0.98); }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .list {
+      margin-top: 12px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .list-item {
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.18);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .list-item .l {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.18);
+      flex: 0 0 auto;
+    }
+
+    .list-item .t {
+      font-weight: 800;
+      font-size: 13px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .list-item .d {
+      margin-top: 3px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.68);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .chev { opacity: 0.9; font-weight: 900; }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <a href="index.html">← 返回</a>
+      <div class="header-title" id="headerTitle">首页</div>
+      <a href="../index.html">总览</a>
+    </div>
+
+    <main class="content">
+      <section class="section active" id="home">
+        <div class="card">
+          <div class="card-title">手机端 App Shell</div>
+          <div class="card-sub">强调触控尺寸与安全区，底部玻璃 Tabbar 固定悬浮，适合作为移动 Web 的基础壳。</div>
+          <div class="row">
+            <div class="pill" id="hapticBtn">轻触反馈（模拟）</div>
+            <div class="pill" id="toastBtn">提示条</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">推荐模块</div>
+          <div class="card-sub">列表项采用玻璃背景 + 高对比文字，便于在复杂渐变背景上阅读。</div>
+          <div class="list">
+            <div class="list-item">
+              <div class="l">
+                <div class="badge">🎧</div>
+                <div>
+                  <div class="t">每日歌单</div>
+                  <div class="d">为你挑选的 20 首精选</div>
+                </div>
+              </div>
+              <div class="chev">→</div>
+            </div>
+            <div class="list-item">
+              <div class="l">
+                <div class="badge">🧊</div>
+                <div>
+                  <div class="t">玻璃卡片合集</div>
+                  <div class="d">高斯模糊 + 高光边框</div>
+                </div>
+              </div>
+              <div class="chev">→</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="search">
+        <div class="card">
+          <div class="card-title">搜索</div>
+          <div class="card-sub">这里用一个玻璃输入框示意手机端搜索页布局。</div>
+          <div style="margin-top: 12px;">
+            <input id="searchInput" placeholder="搜索内容…" style="width:100%; padding: 14px 14px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.22); background: rgba(255,255,255,0.14); color: white; font-size: 15px; outline: none; backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%);" />
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="library">
+        <div class="card">
+          <div class="card-title">资料库</div>
+          <div class="card-sub">手机端常见的“卡片分组 + 操作按钮”结构。</div>
+          <div class="row">
+            <div class="pill">最近播放</div>
+            <div class="pill">已收藏</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="profile">
+        <div class="card">
+          <div class="card-title">我的</div>
+          <div class="card-sub">头像与设置项可放在玻璃卡片内，避免直接叠在复杂背景上。</div>
+          <div class="list">
+            <div class="list-item"><div class="l"><div class="badge">👤</div><div><div class="t">账户</div><div class="d">个人信息与安全</div></div></div><div class="chev">→</div></div>
+            <div class="list-item"><div class="l"><div class="badge">⚙️</div><div><div class="t">设置</div><div class="d">主题、通知、隐私</div></div></div><div class="chev">→</div></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <nav class="tabbar" aria-label="Tabbar">
+      <a class="tab active" href="#home" data-target="home"><div class="icon">🏠</div><div>首页</div></a>
+      <a class="tab" href="#search" data-target="search"><div class="icon">🔎</div><div>搜索</div></a>
+      <a class="tab" href="#library" data-target="library"><div class="icon">📚</div><div>资料库</div></a>
+      <a class="tab" href="#profile" data-target="profile"><div class="icon">👤</div><div>我的</div></a>
+    </nav>
+  </div>
+
+  <script>
+    const tabs = Array.from(document.querySelectorAll('.tab'));
+    const sections = Array.from(document.querySelectorAll('.section'));
+    const headerTitle = document.getElementById('headerTitle');
+
+    function setActive(targetId) {
+      sections.forEach(s => s.classList.toggle('active', s.id === targetId));
+      tabs.forEach(t => t.classList.toggle('active', t.dataset.target === targetId));
+      const titleMap = { home: '首页', search: '搜索', library: '资料库', profile: '我的' };
+      headerTitle.textContent = titleMap[targetId] || 'App';
+      history.replaceState(null, '', `#${targetId}`);
+    }
+
+    tabs.forEach(t => {
+      t.addEventListener('click', (e) => {
+        e.preventDefault();
+        setActive(t.dataset.target);
+      });
+    });
+
+    // 初始 hash
+    const initial = (location.hash || '#home').slice(1);
+    if (sections.some(s => s.id === initial)) setActive(initial);
+
+    // 轻量提示条（手机端常见）
+    const toastBtn = document.getElementById('toastBtn');
+    const hapticBtn = document.getElementById('hapticBtn');
+
+    function showToast(text) {
+      const el = document.createElement('div');
+      el.textContent = text;
+      el.style.position = 'fixed';
+      el.style.left = '50%';
+      el.style.transform = 'translateX(-50%)';
+      el.style.top = `calc(10px + env(safe-area-inset-top))`;
+      el.style.padding = '10px 14px';
+      el.style.borderRadius = '999px';
+      el.style.background = 'rgba(255,255,255,0.18)';
+      el.style.border = '1px solid rgba(255,255,255,0.24)';
+      el.style.color = 'white';
+      el.style.fontWeight = '700';
+      el.style.fontSize = '13px';
+      el.style.backdropFilter = 'blur(22px) saturate(180%)';
+      el.style.webkitBackdropFilter = 'blur(22px) saturate(180%)';
+      el.style.boxShadow = '0 10px 30px rgba(0,0,0,0.18)';
+      el.style.zIndex = '9999';
+      el.style.opacity = '0';
+      el.style.transition = 'opacity 160ms ease';
+      document.body.appendChild(el);
+      requestAnimationFrame(() => { el.style.opacity = '1'; });
+      setTimeout(() => {
+        el.style.opacity = '0';
+        setTimeout(() => el.remove(), 200);
+      }, 1300);
+    }
+
+    toastBtn.addEventListener('click', () => showToast('已切换为手机端布局示例'));
+    hapticBtn.addEventListener('click', () => showToast('（演示）触控反馈'));
+  </script>
+</body>
+</html>

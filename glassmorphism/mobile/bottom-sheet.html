@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>手机端 Bottom Sheet（玻璃态）</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --glass-bg: rgba(255, 255, 255, 0.14);
+      --glass-border: rgba(255, 255, 255, 0.24);
+      --text: rgba(255, 255, 255, 0.92);
+      --muted: rgba(255, 255, 255, 0.72);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', sans-serif;
+      min-height: 100vh;
+      background: radial-gradient(900px 600px at 20% 10%, rgba(255,255,255,0.14), transparent 60%),
+                  radial-gradient(900px 600px at 80% 20%, rgba(255,255,255,0.10), transparent 60%),
+                  linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: var(--text);
+      padding: 16px;
+      padding-top: calc(16px + env(safe-area-inset-top));
+      padding-bottom: calc(16px + env(safe-area-inset-bottom));
+    }
+
+    .top {
+      max-width: 520px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .top a {
+      color: white;
+      text-decoration: none;
+      font-weight: 700;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+    }
+
+    .title {
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: -0.2px;
+    }
+
+    .card {
+      max-width: 520px;
+      margin: 14px auto 0;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.20);
+      backdrop-filter: blur(22px) saturate(180%);
+      -webkit-backdrop-filter: blur(22px) saturate(180%);
+      padding: 16px;
+      box-shadow: 0 12px 34px rgba(0,0,0,0.16);
+    }
+
+    .card h2 {
+      font-size: 18px;
+      font-weight: 900;
+      margin-bottom: 8px;
+      letter-spacing: -0.2px;
+    }
+
+    .card p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .btns {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.14);
+      color: white;
+      font-weight: 900;
+      font-size: 14px;
+      letter-spacing: -0.2px;
+      cursor: pointer;
+    }
+
+    .btn.primary {
+      background: rgba(255,255,255,0.22);
+      border-color: rgba(255,255,255,0.26);
+    }
+
+    .btn:active { transform: scale(0.98); }
+
+    /* Sheet */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms ease;
+      z-index: 2000;
+    }
+
+    .overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .sheet {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      transform: translateY(105%);
+      transition: transform 280ms cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 12px;
+      padding-bottom: calc(12px + env(safe-area-inset-bottom));
+    }
+
+    .overlay.open .sheet {
+      transform: translateY(0);
+    }
+
+    .sheet-inner {
+      max-width: 520px;
+      margin: 0 auto;
+      border-radius: 24px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(30px) saturate(180%);
+      -webkit-backdrop-filter: blur(30px) saturate(180%);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 -18px 46px rgba(0,0,0,0.25);
+      overflow: hidden;
+    }
+
+    .handle {
+      width: 44px;
+      height: 5px;
+      border-radius: 999px;
+      margin: 10px auto 4px;
+      background: rgba(255,255,255,0.32);
+    }
+
+    .sheet-head {
+      padding: 14px 16px 12px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,0.14);
+    }
+
+    .sheet-head .h {
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: -0.2px;
+    }
+
+    .sheet-head .s {
+      margin-top: 6px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.72);
+    }
+
+    .actions {
+      padding: 10px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .action {
+      padding: 14px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.12);
+      color: white;
+      font-weight: 900;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .action:active { transform: scale(0.99); }
+
+    .action .left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .action .ic {
+      width: 34px;
+      height: 34px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.14);
+      flex: 0 0 auto;
+    }
+
+    .action .txt {
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .action .chev { opacity: 0.9; }
+
+    .cancel {
+      margin: 10px;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.22);
+      color: white;
+      font-weight: 900;
+      font-size: 15px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="top">
+    <a href="index.html">← 返回</a>
+    <div class="title">Bottom Sheet</div>
+    <a href="../index.html">总览</a>
+  </div>
+
+  <div class="card">
+    <h2>手机端常用弹层</h2>
+    <p>重点是：底部吸附、圆角、玻璃背景、遮罩模糊，以及 iPhone 底部安全区留白。点击按钮打开。</p>
+    <div class="btns">
+      <button class="btn primary" id="open">打开弹层</button>
+      <button class="btn" id="open2">打开（更长列表）</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay" aria-hidden="true">
+    <div class="sheet" role="dialog" aria-modal="true">
+      <div class="sheet-inner">
+        <div class="handle"></div>
+        <div class="sheet-head">
+          <div class="h" id="sheetTitle">选择操作</div>
+          <div class="s" id="sheetSub">玻璃态 + 安全区 + 触控尺寸</div>
+        </div>
+        <div class="actions" id="actions"></div>
+        <div class="cancel" id="cancel">取消</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const overlay = document.getElementById('overlay');
+    const actions = document.getElementById('actions');
+    const sheetTitle = document.getElementById('sheetTitle');
+    const sheetSub = document.getElementById('sheetSub');
+
+    const baseActions = [
+      { icon: '📷', text: '拍照' },
+      { icon: '🖼️', text: '从相册选择' },
+      { icon: '📁', text: '从文件选择' },
+      { icon: '🔗', text: '粘贴链接' },
+    ];
+
+    function render(list) {
+      actions.innerHTML = '';
+      for (const item of list) {
+        const btn = document.createElement('button');
+        btn.className = 'action';
+        btn.innerHTML = `
+          <span class="left">
+            <span class="ic">${item.icon}</span>
+            <span class="txt">${item.text}</span>
+          </span>
+          <span class="chev">→</span>
+        `;
+        btn.addEventListener('click', () => close(`${item.text}（演示）`));
+        actions.appendChild(btn);
+      }
+    }
+
+    function open(mode) {
+      overlay.classList.add('open');
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+
+      if (mode === 2) {
+        sheetTitle.textContent = '分享';
+        sheetSub.textContent = '更长列表，用于测试滚动表现';
+        const longList = baseActions.concat([
+          { icon: '✉️', text: '发送给好友' },
+          { icon: '📌', text: '置顶到主页' },
+          { icon: '⭐', text: '收藏' },
+          { icon: '🧾', text: '复制为文本' },
+          { icon: '🚫', text: '举报' },
+        ]);
+        render(longList);
+      } else {
+        sheetTitle.textContent = '选择操作';
+        sheetSub.textContent = '玻璃态 + 安全区 + 触控尺寸';
+        render(baseActions);
+      }
+    }
+
+    function close(message) {
+      overlay.classList.remove('open');
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      if (message) toast(message);
+    }
+
+    function toast(text) {
+      const el = document.createElement('div');
+      el.textContent = text;
+      el.style.position = 'fixed';
+      el.style.left = '50%';
+      el.style.transform = 'translateX(-50%)';
+      el.style.top = `calc(10px + env(safe-area-inset-top))`;
+      el.style.padding = '10px 14px';
+      el.style.borderRadius = '999px';
+      el.style.background = 'rgba(255,255,255,0.18)';
+      el.style.border = '1px solid rgba(255,255,255,0.24)';
+      el.style.color = 'white';
+      el.style.fontWeight = '800';
+      el.style.fontSize = '13px';
+      el.style.backdropFilter = 'blur(22px) saturate(180%)';
+      el.style.webkitBackdropFilter = 'blur(22px) saturate(180%)';
+      el.style.boxShadow = '0 10px 30px rgba(0,0,0,0.18)';
+      el.style.zIndex = '9999';
+      el.style.opacity = '0';
+      el.style.transition = 'opacity 160ms ease';
+      document.body.appendChild(el);
+      requestAnimationFrame(() => { el.style.opacity = '1'; });
+      setTimeout(() => {
+        el.style.opacity = '0';
+        setTimeout(() => el.remove(), 200);
+      }, 1200);
+    }
+
+    document.getElementById('open').addEventListener('click', () => open(1));
+    document.getElementById('open2').addEventListener('click', () => open(2));
+    document.getElementById('cancel').addEventListener('click', () => close());
+
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) close();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') close();
+    });
+  </script>
+</body>
+</html>

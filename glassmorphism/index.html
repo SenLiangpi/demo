@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iOS 液态玻璃效果 - 示例导航</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            padding: 40px 20px;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 18px;
+            margin-bottom: 60px;
+            font-weight: 400;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 30px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.5), 
+                transparent);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 12px;
+            letter-spacing: -0.3px;
+        }
+
+        .card-description {
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .card-link {
+            display: inline-flex;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .card-link:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateX(5px);
+        }
+
+        .card-link::after {
+            content: '→';
+            margin-left: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .card-link:hover::after {
+            transform: translateX(4px);
+        }
+
+        .icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 36px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 iOS 液态玻璃效果</h1>
+        <p class="subtitle">探索最新的玻璃态设计（Glassmorphism）实例</p>
+
+        <div class="grid">
+            <div class="glass-card">
+                <div class="icon">💳</div>
+                <h2 class="card-title">玻璃卡片</h2>
+                <p class="card-description">展示各种玻璃态卡片设计，包括信息卡片、用户卡片等多种样式。</p>
+                <a href="cards.html" class="card-link">查看示例</a>
+            </div>
+
+            <div class="glass-card">
+                <div class="icon">🎵</div>
+                <h2 class="card-title">音乐播放器</h2>
+                <p class="card-description">iOS风格的玻璃态音乐播放器界面，带有动态模糊和流畅动画。</p>
+                <a href="music-player.html" class="card-link">查看示例</a>
+            </div>
+
+            <div class="glass-card">
+                <div class="icon">🔔</div>
+                <h2 class="card-title">通知卡片</h2>
+                <p class="card-description">类似iOS系统通知的玻璃态设计，支持多种交互效果。</p>
+                <a href="notifications.html" class="card-link">查看示例</a>
+            </div>
+
+            <div class="glass-card">
+                <div class="icon">📝</div>
+                <h2 class="card-title">表单元素</h2>
+                <p class="card-description">输入框、按钮、选择器等表单组件的玻璃态实现。</p>
+                <a href="forms.html" class="card-link">查看示例</a>
+            </div>
+
+            <div class="glass-card">
+                <div class="icon">🧭</div>
+                <h2 class="card-title">导航菜单</h2>
+                <p class="card-description">顶部导航栏和底部Tabbar的玻璃态效果实现。</p>
+                <a href="navigation.html" class="card-link">查看示例</a>
+            </div>
+
+            <div class="glass-card">
+                <div class="icon">💬</div>
+                <h2 class="card-title">对话框</h2>
+                <p class="card-description">模态对话框、弹出层等组件的玻璃态设计。</p>
+                <a href="dialogs.html" class="card-link">查看示例</a>
+            </div>
+
+            <div class="glass-card">
+                <div class="icon">📱</div>
+                <h2 class="card-title">手机端示例</h2>
+                <p class="card-description">面向移动端的全屏布局与安全区处理：Tabbar、Bottom Sheet、锁屏通知列表。</p>
+                <a href="mobile/index.html" class="card-link">查看示例</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

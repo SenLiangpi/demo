@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>玻璃态导航菜单</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 75%, #4facfe 100%);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            min-height: 100vh;
+            padding-top: 80px;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* 顶部导航栏 */
+        .navbar {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            max-width: 1200px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 15px 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .navbar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+        }
+
+        .navbar-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .navbar-brand {
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar-menu {
+            display: flex;
+            gap: 5px;
+            list-style: none;
+        }
+
+        .navbar-item {
+            position: relative;
+        }
+
+        .navbar-link {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            display: block;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .navbar-link:hover,
+        .navbar-link.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .menu-toggle {
+            display: none;
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: white;
+            font-size: 24px;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        /* 内容区域 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            margin-bottom: 30px;
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateX(-5px);
+        }
+
+        h1 {
+            color: white;
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .content-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-box h2 {
+            color: white;
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .content-box p {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        /* 底部 Tabbar */
+        .tabbar {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 40px);
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 10px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+        }
+
+        .tabbar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+        }
+
+        .tabbar-items {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .tabbar-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            padding: 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .tabbar-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .tabbar-item.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .tabbar-icon {
+            font-size: 24px;
+        }
+
+        .tabbar-label {
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* 侧边菜单 */
+        .sidebar {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(30px) saturate(180%);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+        }
+
+        .sidebar-items {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sidebar-item {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .sidebar-item:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .navbar-menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                margin-top: 10px;
+                background: rgba(255, 255, 255, 0.15);
+                backdrop-filter: blur(30px) saturate(180%);
+                border-radius: 20px;
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                padding: 10px;
+                flex-direction: column;
+            }
+
+            .navbar-menu.active {
+                display: flex;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+
+            .content-box {
+                padding: 30px 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="index.html" class="navbar-brand">
+                <span>🎨</span>
+                <span>GlassMorphism</span>
+            </a>
+            <ul class="navbar-menu" id="navbarMenu">
+                <li class="navbar-item"><a href="#home" class="navbar-link active">首页</a></li>
+                <li class="navbar-item"><a href="#features" class="navbar-link">特性</a></li>
+                <li class="navbar-item"><a href="#examples" class="navbar-link">示例</a></li>
+                <li class="navbar-item"><a href="#about" class="navbar-link">关于</a></li>
+            </ul>
+            <button class="menu-toggle" id="menuToggle">☰</button>
+        </div>
+    </nav>
+
+    <!-- 侧边菜单 -->
+    <div class="sidebar">
+        <div class="sidebar-items">
+            <a href="#" class="sidebar-item" title="搜索">🔍</a>
+            <a href="#" class="sidebar-item" title="收藏">⭐</a>
+            <a href="#" class="sidebar-item" title="设置">⚙️</a>
+            <a href="#" class="sidebar-item" title="帮助">❓</a>
+        </div>
+    </div>
+
+    <!-- 主要内容 -->
+    <div class="container">
+        <a href="index.html" class="back-button">← 返回首页</a>
+
+        <h1>导航菜单</h1>
+
+        <div class="content-box" id="home">
+            <h2>欢迎使用玻璃态导航</h2>
+            <p>
+                这个页面展示了多种玻璃态导航菜单的实现方式，包括顶部导航栏、底部 Tabbar 和侧边菜单。
+                所有导航元素都使用了现代的玻璃态设计风格，提供清晰的视觉层次和流畅的交互体验。
+            </p>
+        </div>
+
+        <div class="content-box" id="features">
+            <h2>主要特性</h2>
+            <p>
+                • 背景模糊效果（backdrop-filter）<br>
+                • 半透明设计<br>
+                • 流畅的动画过渡<br>
+                • 响应式布局<br>
+                • 优雅的交互反馈<br>
+                • iOS 风格设计语言
+            </p>
+        </div>
+
+        <div class="content-box" id="examples">
+            <h2>使用示例</h2>
+            <p>
+                这些导航组件可以应用于各种 Web 应用和移动端页面。顶部导航栏适合展示主要的导航链接，
+                底部 Tabbar 适合移动应用的主要功能切换，侧边菜单则可以放置次要功能的快捷入口。
+            </p>
+        </div>
+
+        <div class="content-box" id="about">
+            <h2>关于玻璃态设计</h2>
+            <p>
+                玻璃态（Glassmorphism）是一种现代 UI 设计趋势，通过半透明、背景模糊和柔和的阴影
+                创造出类似毛玻璃的视觉效果。这种设计风格在 Apple 的 iOS 和 macOS 系统中得到广泛应用，
+                为用户界面带来了层次感和现代感。
+            </p>
+        </div>
+
+        <div style="height: 100px;"></div>
+    </div>
+
+    <!-- 底部 Tabbar -->
+    <div class="tabbar">
+        <div class="tabbar-items">
+            <a href="#home" class="tabbar-item active">
+                <span class="tabbar-icon">🏠</span>
+                <span class="tabbar-label">首页</span>
+            </a>
+            <a href="#features" class="tabbar-item">
+                <span class="tabbar-icon">⚡</span>
+                <span class="tabbar-label">特性</span>
+            </a>
+            <a href="#examples" class="tabbar-item">
+                <span class="tabbar-icon">📱</span>
+                <span class="tabbar-label">示例</span>
+            </a>
+            <a href="#about" class="tabbar-item">
+                <span class="tabbar-icon">ℹ️</span>
+                <span class="tabbar-label">关于</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // 移动端菜单切换
+        const menuToggle = document.getElementById('menuToggle');
+        const navbarMenu = document.getElementById('navbarMenu');
+
+        menuToggle.addEventListener('click', () => {
+            navbarMenu.classList.toggle('active');
+        });
+
+        // 导航链接激活状态
+        const navLinks = document.querySelectorAll('.navbar-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                navLinks.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                navbarMenu.classList.remove('active');
+            });
+        });
+
+        // Tabbar 激活状态
+        const tabbarItems = document.querySelectorAll('.tabbar-item');
+        tabbarItems.forEach(item => {
+            item.addEventListener('click', function() {
+                tabbarItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>玻璃卡片效果</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            top: -100px;
+            right: -100px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+            bottom: -100px;
+            left: -100px;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-30px) scale(1.05); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
+        }
+
+        h1 {
+            color: white;
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 18px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        /* 基础玻璃卡片 */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* 用户卡片 */
+        .user-card {
+            text-align: center;
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-title {
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .card-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            display: block;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        /* 信息卡片 */
+        .info-card {
+            position: relative;
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            margin-bottom: 20px;
+        }
+
+        .card-description {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .card-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .card-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        /* 图片卡片 */
+        .image-card {
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+        }
+
+        .image-card-content {
+            padding: 25px;
+        }
+
+        .image-card-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .image-card-text {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* 渐变边框卡片 */
+        .gradient-border-card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid transparent;
+            background-clip: padding-box;
+        }
+
+        .gradient-border-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.6), 
+                rgba(255, 255, 255, 0.1),
+                rgba(255, 255, 255, 0.6));
+            border-radius: 20px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gradient-border-card:hover::before {
+            opacity: 1;
+        }
+
+        /* 悬浮发光卡片 */
+        .glow-card {
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1),
+                            0 0 40px rgba(255, 255, 255, 0);
+            }
+            50% {
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1),
+                            0 0 40px rgba(255, 255, 255, 0.3);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="index.html" class="back-button">← 返回首页</a>
+            <h1>玻璃卡片效果</h1>
+            <p class="subtitle">多种玻璃态卡片设计示例</p>
+        </div>
+
+        <div class="grid">
+            <!-- 用户卡片 -->
+            <div class="glass-card user-card">
+                <div class="avatar">👤</div>
+                <h3 class="card-title">张小明</h3>
+                <p class="card-subtitle">iOS 开发工程师</p>
+                <div class="stats">
+                    <div class="stat">
+                        <span class="stat-value">128</span>
+                        <span class="stat-label">关注</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">256</span>
+                        <span class="stat-label">粉丝</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">32</span>
+                        <span class="stat-label">文章</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 信息卡片 -->
+            <div class="glass-card info-card">
+                <div class="card-icon">💡</div>
+                <h3 class="card-title">设计理念</h3>
+                <p class="card-description">
+                    玻璃态设计强调层次感和深度，通过背景模糊和半透明效果创造出现代感十足的用户界面。
+                </p>
+                <button class="card-button">了解更多</button>
+            </div>
+
+            <!-- 图片卡片 -->
+            <div class="glass-card image-card">
+                <div class="card-image">🎨</div>
+                <div class="image-card-content">
+                    <h3 class="image-card-title">创意设计</h3>
+                    <p class="image-card-text">
+                        将玻璃态效果应用于各种界面元素，创造独特的视觉体验。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 渐变边框卡片 -->
+            <div class="glass-card gradient-border-card info-card">
+                <div class="card-icon">✨</div>
+                <h3 class="card-title">渐变边框</h3>
+                <p class="card-description">
+                    悬停时显示渐变边框效果，增强交互反馈和视觉层次。
+                </p>
+                <button class="card-button">查看效果</button>
+            </div>
+
+            <!-- 发光卡片 -->
+            <div class="glass-card glow-card info-card">
+                <div class="card-icon">🌟</div>
+                <h3 class="card-title">发光效果</h3>
+                <p class="card-description">
+                    卡片带有呼吸式发光动画，营造出梦幻般的视觉效果。
+                </p>
+                <button class="card-button">体验效果</button>
+            </div>
+
+            <!-- 统计卡片 -->
+            <div class="glass-card info-card">
+                <div class="card-icon">📊</div>
+                <h3 class="card-title">数据统计</h3>
+                <p class="card-description">
+                    实时数据展示卡片，清晰展现关键指标和趋势变化。
+                </p>
+                <div class="stats">
+                    <div class="stat">
+                        <span class="stat-value">98%</span>
+                        <span class="stat-label">满意度</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-value">1.2k</span>
+                        <span class="stat-label">用户</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

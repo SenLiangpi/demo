@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>手机端 锁屏通知列表（玻璃态）</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --glass-bg: rgba(255, 255, 255, 0.14);
+      --glass-border: rgba(255, 255, 255, 0.22);
+      --text: rgba(255, 255, 255, 0.92);
+      --muted: rgba(255, 255, 255, 0.70);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', sans-serif;
+      min-height: 100vh;
+      background: radial-gradient(700px 500px at 30% 10%, rgba(255,255,255,0.14), transparent 60%),
+                  radial-gradient(700px 500px at 80% 30%, rgba(255,255,255,0.12), transparent 60%),
+                  linear-gradient(135deg, #111827 0%, #1f2937 45%, #0b1220 100%);
+      color: var(--text);
+      padding: 16px;
+      padding-top: calc(16px + env(safe-area-inset-top));
+      padding-bottom: calc(16px + env(safe-area-inset-bottom));
+    }
+
+    .top {
+      max-width: 520px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .top a {
+      color: white;
+      text-decoration: none;
+      font-weight: 800;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.18);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+    }
+
+    .title {
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: -0.2px;
+    }
+
+    .clock {
+      max-width: 520px;
+      margin: 18px auto 12px;
+      text-align: center;
+    }
+
+    .time {
+      font-size: 54px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1;
+    }
+
+    .date {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .controls {
+      max-width: 520px;
+      margin: 14px auto 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.12);
+      color: white;
+      font-weight: 900;
+      font-size: 14px;
+      cursor: pointer;
+      backdrop-filter: blur(18px) saturate(180%);
+      -webkit-backdrop-filter: blur(18px) saturate(180%);
+    }
+
+    .btn.primary {
+      background: rgba(255,255,255,0.18);
+      border-color: rgba(255,255,255,0.22);
+    }
+
+    .btn:active { transform: scale(0.98); }
+
+    .stack {
+      max-width: 520px;
+      margin: 14px auto 0;
+      display: grid;
+      gap: 12px;
+    }
+
+    .notice {
+      position: relative;
+      border-radius: 22px;
+      padding: 14px 14px 14px 14px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(28px) saturate(180%);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.22);
+      overflow: hidden;
+    }
+
+    .notice::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.46), transparent);
+    }
+
+    .row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .app {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .app-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.16);
+      flex: 0 0 auto;
+    }
+
+    .app-name {
+      font-size: 12px;
+      font-weight: 900;
+      color: rgba(255,255,255,0.86);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .time2 {
+      font-size: 11px;
+      color: rgba(255,255,255,0.62);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .msg {
+      margin-top: 10px;
+      font-size: 13px;
+      line-height: 1.55;
+      color: rgba(255,255,255,0.86);
+    }
+
+    .actions {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .act {
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.12);
+      color: white;
+      font-weight: 900;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .act.primary { background: rgba(255,255,255,0.18); }
+
+    .act:active { transform: scale(0.99); }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="top">
+    <a href="index.html">← 返回</a>
+    <div class="title">锁屏通知</div>
+    <a href="../index.html">总览</a>
+  </div>
+
+  <div class="clock">
+    <div class="time" id="time">08:26</div>
+    <div class="date" id="date">1月5日 周一</div>
+  </div>
+
+  <div class="controls">
+    <button class="btn primary" id="add">新增一条通知</button>
+    <button class="btn" id="clear">清空</button>
+  </div>
+
+  <div class="stack" id="stack">
+    <div class="notice">
+      <div class="row">
+        <div class="app">
+          <div class="app-icon">💬</div>
+          <div class="app-name">消息</div>
+        </div>
+        <div class="time2">刚刚</div>
+      </div>
+      <div class="msg">你有一条新的消息：今晚一起吃饭吗？</div>
+      <div class="actions">
+        <button class="act primary">回复</button>
+        <button class="act">忽略</button>
+      </div>
+    </div>
+
+    <div class="notice">
+      <div class="row">
+        <div class="app">
+          <div class="app-icon">📦</div>
+          <div class="app-name">快递</div>
+        </div>
+        <div class="time2">10分钟前</div>
+      </div>
+      <div class="msg">你的包裹已到达驿站，请及时取件。</div>
+      <div class="actions">
+        <button class="act primary">查看</button>
+        <button class="act">稍后</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const stack = document.getElementById('stack');
+    const timeEl = document.getElementById('time');
+    const dateEl = document.getElementById('date');
+
+    function pad(n) { return String(n).padStart(2, '0'); }
+
+    function tick() {
+      const d = new Date();
+      timeEl.textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+
+      const week = ['周日','周一','周二','周三','周四','周五','周六'];
+      dateEl.textContent = `${d.getMonth() + 1}月${d.getDate()}日 ${week[d.getDay()]}`;
+    }
+
+    tick();
+    setInterval(tick, 1000);
+
+    const presets = [
+      { icon: '🎧', app: '音乐', msg: '为你推荐一首新歌：夏日回忆', t: '刚刚' },
+      { icon: '🧊', app: 'Glass', msg: '你的玻璃态示例已生成，可立即预览。', t: '刚刚' },
+      { icon: '🗓️', app: '日历', msg: '15:00 会议提醒：项目评审', t: '1分钟前' },
+      { icon: '🧾', app: '备忘录', msg: '别忘了：买牛奶、面包、鸡蛋', t: '2分钟前' },
+    ];
+
+    function makeNotice(p) {
+      const el = document.createElement('div');
+      el.className = 'notice';
+      el.innerHTML = `
+        <div class="row">
+          <div class="app">
+            <div class="app-icon">${p.icon}</div>
+            <div class="app-name">${p.app}</div>
+          </div>
+          <div class="time2">${p.t}</div>
+        </div>
+        <div class="msg">${p.msg}</div>
+        <div class="actions">
+          <button class="act primary">打开</button>
+          <button class="act">清除</button>
+        </div>
+      `;
+
+      el.querySelectorAll('.act').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (btn.textContent === '清除') {
+            el.remove();
+          }
+        });
+      });
+
+      return el;
+    }
+
+    document.getElementById('add').addEventListener('click', () => {
+      const p = presets[Math.floor(Math.random() * presets.length)];
+      stack.insertBefore(makeNotice(p), stack.firstChild);
+    });
+
+    document.getElementById('clear').addEventListener('click', () => {
+      stack.innerHTML = '';
+    });
+
+    // 演示：点击“忽略/稍后/回复”等不做真实动作
+    document.addEventListener('click', (e) => {
+      if (e.target.classList.contains('act') && e.target.textContent !== '清除') {
+        // no-op
+      }
+    });
+  </script>
+</body>
+</html>

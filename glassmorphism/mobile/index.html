@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>手机端（iOS 风格）液态玻璃示例</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --glass-bg: rgba(255, 255, 255, 0.7);
+      --glass-border: rgba(255, 255, 255, 1);
+      /* 白色边框“明亮度渐变”配色：左上更亮、右下更暗一点 */
+      --border-hi: rgba(255, 255, 255, 0.95);
+      --border-mid: rgba(255, 255, 255, 0.55);
+      --border-lo: rgba(255, 255, 255, 0.22);
+      /* --text: rgba(255, 255, 255, 0.92); */
+      --text: #000000;
+      /* --muted: rgba(255, 255, 255, 0.72); */
+      --muted: #000000;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', sans-serif;
+      min-height: 100vh;
+      /* background: radial-gradient(900px 600px at 15% 10%, rgba(255,255,255,0.14), transparent 60%),
+                  radial-gradient(900px 600px at 85% 20%, rgba(255,255,255,0.12), transparent 60%),
+                  linear-gradient(135deg, #667eea 0%, #764ba2 35%, #f093fb 70%, #4facfe 100%); */
+      background: url(https://images.pexels.com/photos/17474740/pexels-photo-17474740.jpeg);
+      background-size: cover;
+      padding: 24px;
+      padding-top: calc(24px + env(safe-area-inset-top));
+      padding-bottom: calc(24px + env(safe-area-inset-bottom));
+      color: var(--text);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      max-width: 420px;
+      margin: 0 auto 16px;
+    }
+
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: white;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      background:
+        linear-gradient(rgba(255,255,255,0.16), rgba(255,255,255,0.16)) padding-box,
+        linear-gradient(135deg, var(--border-hi), var(--border-lo) 45%, var(--border-mid) 70%, var(--border-hi)) border-box;
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      box-shadow:
+        0 10px 24px rgba(0,0,0,0.12),
+        inset 0 1px 0 rgba(255,255,255,0.65);
+    }
+
+    .title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+    }
+
+    .hint {
+      max-width: 420px;
+      margin: 0 auto 18px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .list {
+      max-width: 420px;
+      margin: 0 auto;
+      display: grid;
+      gap: 12px;
+      margin-top: 200px;
+    }
+
+    .item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 16px;
+      border-radius: 18px;
+      /* 关键：双背景实现“白色边框亮度渐变” */
+      border: 1px solid transparent;
+      background:
+        linear-gradient(var(--glass-bg), var(--glass-bg)) padding-box,
+        linear-gradient(135deg, var(--border-hi), var(--border-lo) 40%, var(--border-mid) 70%, var(--border-hi)) border-box;
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.14);
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+    }
+
+    /* 再叠一层“顶部高光 + 底部轻阴影”，更像 iOS 的玻璃边缘 */
+    .item::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.75),
+        inset 0 -1px 0 rgba(0,0,0,0.06);
+    }
+
+    .left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      border: 1px solid transparent;
+      background:
+        linear-gradient(rgba(255,255,255,0.22), rgba(255,255,255,0.22)) padding-box,
+        linear-gradient(135deg, var(--border-hi), var(--border-lo) 45%, var(--border-mid) 70%, var(--border-hi)) border-box;
+      flex: 0 0 auto;
+      font-size: 20px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.65);
+    }
+
+    .meta {
+      min-width: 0;
+    }
+
+    .name {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .desc {
+      margin-top: 4px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.3;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .arrow {
+      opacity: 0.9;
+      font-weight: 700;
+      flex: 0 0 auto;
+    }
+
+    @media (min-width: 860px) {
+      body { padding: 40px; padding-top: calc(40px + env(safe-area-inset-top)); }
+      .hint, .topbar, .list { max-width: 520px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <a class="back" href="../index.html">← 返回</a>
+    <div class="title">手机端示例</div>
+    <div style="width: 64px;"></div>
+  </div>
+
+  <p class="hint">这些页面以手机端布局为主：全屏结构、触控尺寸、iPhone 安全区（viewport-fit=cover + env(safe-area-inset-*)）。建议用浏览器手机模式或真机打开。</p>
+
+  <div class="list">
+    <a class="item" href="app-shell.html">
+      <div class="left">
+        <div class="icon">📱</div>
+        <div class="meta">
+          <div class="name">App Shell + Tabbar</div>
+          <div class="desc">全屏应用骨架：顶部标题 + 内容区 + 底部玻璃 Tabbar（含安全区）。</div>
+        </div>
+      </div>
+      <div class="arrow">→</div>
+    </a>
+
+    <a class="item" href="bottom-sheet.html">
+      <div class="left">
+        <div class="icon">⬆️</div>
+        <div class="meta">
+          <div class="name">Bottom Sheet</div>
+          <div class="desc">手机端常用底部弹层：拖拽手柄视觉、弹出动画、玻璃态背景。</div>
+        </div>
+      </div>
+      <div class="arrow">→</div>
+    </a>
+
+    <a class="item" href="lockscreen-notifications.html">
+      <div class="left">
+        <div class="icon">🔔</div>
+        <div class="meta">
+          <div class="name">锁屏通知列表</div>
+          <div class="desc">更贴近手机的通知列表样式：卡片堆叠、轻量交互、可新增。</div>
+        </div>
+      </div>
+      <div class="arrow">→</div>
+    </a>
+  </div>
+</body>
+</html>

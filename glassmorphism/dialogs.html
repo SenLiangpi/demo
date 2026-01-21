@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>玻璃态对话框</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateX(-5px);
+        }
+
+        h1 {
+            color: white;
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        .demo-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .demo-button {
+            padding: 16px 24px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .demo-button:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        /* 模态遮罩 */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* 基础对话框 */
+        .dialog {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 30px;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modal-overlay.active .dialog {
+            transform: scale(1);
+        }
+
+        .dialog::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+        }
+
+        /* 对话框图标 */
+        .dialog-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            margin: 0 auto 20px;
+        }
+
+        /* 对话框标题 */
+        .dialog-title {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        /* 对话框内容 */
+        .dialog-content {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 15px;
+            line-height: 1.6;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        /* 对话框按钮组 */
+        .dialog-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .dialog-button {
+            flex: 1;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dialog-button:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .dialog-button.primary {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .dialog-button.primary:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        /* 关闭按钮 */
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .close-button:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: rotate(90deg);
+        }
+
+        /* 输入对话框 */
+        .dialog-input {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            margin-bottom: 20px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .dialog-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .dialog-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* 底部弹出框 */
+        .bottom-sheet {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(30px) saturate(180%);
+            border-radius: 24px 24px 0 0;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-bottom: none;
+            padding: 30px;
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.active .bottom-sheet {
+            transform: translateY(0);
+        }
+
+        .bottom-sheet::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+        }
+
+        .sheet-handle {
+            width: 40px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+            margin: 0 auto 20px;
+        }
+
+        .sheet-items {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sheet-item {
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .sheet-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 32px;
+            }
+
+            .dialog {
+                padding: 25px 20px;
+            }
+
+            .demo-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="index.html" class="back-button">← 返回首页</a>
+            <h1>对话框</h1>
+            <p class="subtitle">多种玻璃态对话框和弹窗示例</p>
+        </div>
+
+        <div class="demo-buttons">
+            <button class="demo-button" onclick="showDialog('alert')">提示对话框</button>
+            <button class="demo-button" onclick="showDialog('confirm')">确认对话框</button>
+            <button class="demo-button" onclick="showDialog('prompt')">输入对话框</button>
+            <button class="demo-button" onclick="showDialog('success')">成功提示</button>
+            <button class="demo-button" onclick="showDialog('error')">错误提示</button>
+            <button class="demo-button" onclick="showDialog('bottom')">底部弹窗</button>
+        </div>
+    </div>
+
+    <!-- 模态遮罩 -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeDialog(event)">
+        <!-- 对话框容器 -->
+        <div id="dialogContainer"></div>
+    </div>
+
+    <script>
+        const modalOverlay = document.getElementById('modalOverlay');
+        const dialogContainer = document.getElementById('dialogContainer');
+
+        const dialogTemplates = {
+            alert: `
+                <div class="dialog">
+                    <button class="close-button" onclick="closeDialog()">×</button>
+                    <div class="dialog-icon">ℹ️</div>
+                    <h3 class="dialog-title">提示</h3>
+                    <p class="dialog-content">这是一个玻璃态风格的提示对话框，用于展示重要信息。</p>
+                    <div class="dialog-buttons">
+                        <button class="dialog-button primary" onclick="closeDialog()">确定</button>
+                    </div>
+                </div>
+            `,
+            confirm: `
+                <div class="dialog">
+                    <button class="close-button" onclick="closeDialog()">×</button>
+                    <div class="dialog-icon">❓</div>
+                    <h3 class="dialog-title">确认操作</h3>
+                    <p class="dialog-content">您确定要执行此操作吗？此操作可能无法撤销。</p>
+                    <div class="dialog-buttons">
+                        <button class="dialog-button" onclick="closeDialog()">取消</button>
+                        <button class="dialog-button primary" onclick="closeDialog()">确认</button>
+                    </div>
+                </div>
+            `,
+            prompt: `
+                <div class="dialog">
+                    <button class="close-button" onclick="closeDialog()">×</button>
+                    <div class="dialog-icon">✏️</div>
+                    <h3 class="dialog-title">输入信息</h3>
+                    <p class="dialog-content">请在下方输入您的内容：</p>
+                    <input type="text" class="dialog-input" placeholder="请输入内容...">
+                    <div class="dialog-buttons">
+                        <button class="dialog-button" onclick="closeDialog()">取消</button>
+                        <button class="dialog-button primary" onclick="closeDialog()">提交</button>
+                    </div>
+                </div>
+            `,
+            success: `
+                <div class="dialog">
+                    <button class="close-button" onclick="closeDialog()">×</button>
+                    <div class="dialog-icon">✓</div>
+                    <h3 class="dialog-title">操作成功</h3>
+                    <p class="dialog-content">您的操作已成功完成！</p>
+                    <div class="dialog-buttons">
+                        <button class="dialog-button primary" onclick="closeDialog()">太好了</button>
+                    </div>
+                </div>
+            `,
+            error: `
+                <div class="dialog">
+                    <button class="close-button" onclick="closeDialog()">×</button>
+                    <div class="dialog-icon">✕</div>
+                    <h3 class="dialog-title">操作失败</h3>
+                    <p class="dialog-content">抱歉，操作失败。请检查后重试。</p>
+                    <div class="dialog-buttons">
+                        <button class="dialog-button" onclick="closeDialog()">取消</button>
+                        <button class="dialog-button primary" onclick="closeDialog()">重试</button>
+                    </div>
+                </div>
+            `,
+            bottom: `
+                <div class="bottom-sheet">
+                    <div class="sheet-handle"></div>
+                    <h3 class="dialog-title">选择操作</h3>
+                    <div class="sheet-items">
+                        <button class="sheet-item" onclick="closeDialog()">📷 拍照</button>
+                        <button class="sheet-item" onclick="closeDialog()">🖼️ 从相册选择</button>
+                        <button class="sheet-item" onclick="closeDialog()">📁 从文件选择</button>
+                        <button class="sheet-item" onclick="closeDialog()">❌ 取消</button>
+                    </div>
+                </div>
+            `
+        };
+
+        function showDialog(type) {
+            dialogContainer.innerHTML = dialogTemplates[type];
+            modalOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDialog(event) {
+            if (event && event.target.closest('.dialog, .bottom-sheet') && !event.target.classList.contains('close-button')) {
+                return;
+            }
+            
+            modalOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+            
+            setTimeout(() => {
+                dialogContainer.innerHTML = '';
+            }, 300);
+        }
+
+        // ESC 键关闭对话框
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeDialog();
+            }
+        });
+    </script>
+</body>
+</html>
