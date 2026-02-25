@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Markdown 换行清理工具</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f7fb;
+      color: #1f2937;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      gap: 16px;
+    }
+
+    .card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    h1 {
+      font-size: 24px;
+      line-height: 1.2;
+    }
+
+    .hint {
+      font-size: 14px;
+      color: #4b5563;
+      line-height: 1.6;
+    }
+
+    label {
+      font-size: 13px;
+      color: #4b5563;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    input[type="file"],
+    textarea,
+    button {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      font: inherit;
+    }
+
+    input[type="file"] {
+      padding: 10px;
+      background: #ffffff;
+    }
+
+    textarea {
+      min-height: 260px;
+      padding: 10px;
+      resize: vertical;
+      line-height: 1.65;
+      background: #ffffff;
+    }
+
+    .btns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    button {
+      padding: 10px 12px;
+      background: #111827;
+      color: #ffffff;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .status {
+      min-height: 20px;
+      font-size: 13px;
+      color: #374151;
+    }
+
+    @media (max-width: 640px) {
+      body { padding: 14px; }
+      .btns { grid-template-columns: 1fr; }
+      textarea { min-height: 200px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Markdown 换行清理工具</h1>
+
+    <div class="card">
+      <p class="hint">上传 .md 文件后，去除段落之间多余空白行（连续空行会压缩为单个换行），并支持下载结果。</p>
+
+      <div>
+        <label for="fileInput">选择 Markdown 文件</label>
+        <input id="fileInput" type="file" accept=".md,text/markdown,text/plain" />
+      </div>
+
+      <div>
+        <label for="source">原文</label>
+        <textarea id="source" placeholder="上传后自动填充，也可手动粘贴"></textarea>
+      </div>
+
+      <div class="btns">
+        <button id="cleanBtn" type="button">清理多余换行</button>
+        <button id="downloadBtn" type="button">下载结果 .md</button>
+      </div>
+
+      <div>
+        <label for="result">结果</label>
+        <textarea id="result" placeholder="清理结果显示在这里"></textarea>
+      </div>
+
+      <div id="status" class="status"></div>
+    </div>
+  </div>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const source = document.getElementById('source');
+    const result = document.getElementById('result');
+    const cleanBtn = document.getElementById('cleanBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const status = document.getElementById('status');
+
+    let currentFileName = 'cleaned.md';
+
+    function cleanMarkdown(text) {
+      return text
+        .replace(/\r\n?/g, '\n')
+        .replace(/[\t ]+\n/g, '\n')
+        .replace(/\n\s*\n+/g, '\n')
+        .trim();
+    }
+
+    function setStatus(message) {
+      status.textContent = message;
+    }
+
+    fileInput.addEventListener('change', async (event) => {
+      const file = event.target.files && event.target.files[0];
+      if (!file) {
+        setStatus('未选择文件');
+        return;
+      }
+
+      currentFileName = file.name.replace(/\.md$/i, '') + '.cleaned.md';
+
+      try {
+        const text = await file.text();
+        source.value = text;
+        result.value = cleanMarkdown(text);
+        setStatus('文件已读取并完成清理');
+      } catch (error) {
+        setStatus('读取文件失败，请重试');
+      }
+    });
+
+    cleanBtn.addEventListener('click', () => {
+      if (!source.value.trim()) {
+        setStatus('请先上传或粘贴 Markdown 内容');
+        return;
+      }
+      result.value = cleanMarkdown(source.value);
+      setStatus('清理完成');
+    });
+
+    downloadBtn.addEventListener('click', () => {
+      if (!result.value.trim()) {
+        setStatus('暂无可下载内容，请先清理文本');
+        return;
+      }
+
+      const blob = new Blob([result.value], { type: 'text/markdown;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = currentFileName;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+      setStatus('已下载清理后的 Markdown 文件');
+    });
+  </script>
+</body>
+</html>
