@@ -1,0 +1,821 @@
+可以。SiView Standard 可以理解为：
+IBM 面向半导体晶圆厂的专业 MES 产品，是很多先进晶圆厂生产现场的“核心生产执行系统”。
+
+它不是普通工厂 MES 简单改一改，而是专门为半导体 Fab 这种复杂场景设计的：
+lot / wafer / FOUP / recipe / tool / chamber / reticle / WIP / dispatch / hold / rework / AMHS / EAP / SPC / APC 都要管。
+
+⸻
+
+1. SiView Standard 是什么？
+
+官方名称现在常见写法是：
+
+IBM SiView Standard
+或
+IBM IndustryView for Semiconductor Standard
+
+IBM 官方把它定位为半导体制造用的 Manufacturing Execution System，MES，用于现代化全球半导体制造、实现系统集成、供应链联动和智能制造。IBM 中国官网也明确提到，SiView Standard 提供全自动单晶圆控制，并可以构建一条生产线来处理载体中的多个批次。 
+
+简单说：
+
+SiView Standard = 晶圆厂的主 MES。
+
+它主要管：
+
+* 每个 lot 当前在哪
+* 每片 wafer 的状态
+* 下一步该去哪道工序
+* 能不能上某台设备
+* 应该用哪个 recipe
+* 设备和 chamber 是否 qualified
+* 是否需要量测
+* 是否需要 hold
+* 是否要返工
+* 是否可以 release
+* 做完以后数据怎么记录
+* 出问题后怎么追溯
+
+⸻
+
+2. 它的历史：确实很老，而且日本 IBM 色彩很重
+
+你之前记得“IBM、很老、日本人开发”，这个基本方向是对的。
+
+IBM 日本的一篇介绍说，SiView Standard 是用于管理和控制半导体制造流程的 MES，并且它的起点可以追溯到 1980 年代滋贺县 IBM 野洲工厂最先进制造线使用的内部解决方案，之后才外售，这被描述为 SiView 业务的开始。 
+
+另外，2024 年日本 i Magazine 的文章提到，SiView Standard 自 1998 年发布以来，已经在世界各地 Fab 有丰富导入实绩。 
+
+所以它的历史大概是：
+
+1980年代
+IBM 日本野洲工厂内部半导体制造系统
+        ↓
+1990年代后期
+作为 SiView Standard 商品化
+        ↓
+2000年代
+伴随 200mm / 300mm 晶圆厂自动化推广
+        ↓
+现在
+仍然作为 IBM 半导体 MES 产品继续使用和现代化
+
+它不是一个新兴 SaaS 系统，而是典型的：
+
+老牌、稳定、重型、关键任务型半导体 MES。
+
+⸻
+
+3. SiView Standard 在晶圆厂里处于什么位置？
+
+在晶圆厂的信息系统里，大概可以这样看：
+
+ERP / APS
+  ↓
+SiView Standard MES
+  ↓
+EAP / tMSP / Host
+  ↓
+SECS/GEM
+  ↓
+半导体设备 Tool
+SiView ↔ AMHS / MCS
+SiView ↔ SPC
+SiView ↔ APC
+SiView ↔ FDC
+SiView ↔ YMS / Data Platform
+
+也就是说：
+
+ERP 决定要生产什么；SiView 决定现场怎么执行；EAP 和设备真正通信；AMHS 负责把 FOUP 搬来搬去。
+
+IBM 官网对 SiView 的描述里也强调它和企业系统集成，用统一系统改善供应链管理，并支持更紧密的制造和供应链联动。 
+
+⸻
+
+4. SiView Standard 最核心的对象：Lot、Wafer、FOUP
+
+普通制造业 MES 可能管的是“工单”“零件”“工位”。
+但 SiView 这种半导体 MES 管的是更复杂的对象。
+
+对象	含义
+Lot	一批晶圆，晶圆厂生产管理核心单位
+Wafer	单片晶圆
+FOUP / Carrier	装晶圆的盒子
+Route / Flow	工艺路线
+Step / Operation	某一道工艺步骤
+Recipe	设备工艺配方
+Tool / Equipment	工艺设备
+Chamber	设备腔体
+Reticle / Mask	光刻掩膜版
+WIP	在制品
+Hold / Release	暂停与放行
+Rework	返工流程
+
+SiView 要保证：
+
+每一批 lot 都按照正确路线、正确顺序、正确设备、正确 recipe 被处理。
+
+⸻
+
+5. 它为什么适合晶圆厂？
+
+因为晶圆制造不是普通流水线。
+
+一片晶圆可能要经过：
+
+* 清洗
+* 氧化
+* 沉积
+* 光刻
+* 显影
+* 刻蚀
+* 去胶
+* 离子注入
+* CMP
+* 薄膜量测
+* CD 量测
+* 缺陷检测
+* 多层循环
+
+而且这些步骤不是简单走一遍。
+先进芯片可能要反复几十层、上百层，流程非常复杂。
+
+SiView 的价值就在于：
+
+防止走错工序
+防止用错 recipe
+防止上错设备
+防止漏量测
+防止错误放行
+防止异常 lot 继续流转
+保证全流程追溯
+
+IBM 的产品介绍也强调 SiView 可以帮助半导体生产线尽早启动、运行并稳定下来，并通过统一系统改善供应链管理。 
+
+⸻
+
+6. SiView 的典型功能模块
+
+可以把 SiView Standard 理解为由很多业务模块组成。
+
+6.1 Lot Management：批次管理
+
+这是最核心的部分。
+
+它管理 lot 的生命周期：
+
+Create
+↓
+Release
+↓
+Wait
+↓
+Move In
+↓
+Process
+↓
+Move Out
+↓
+Next Step
+↓
+Hold / Rework / Scrap / Finish
+
+比如一个 lot 当前状态可能是：
+
+Lot ID: L20260628001
+Product: Logic_2nm_A01
+Current Step: ETCH-230
+Status: Waiting
+Priority: Hot Lot
+Carrier: FOUP-8842
+Next Tool Group: ETCH_GRP_A
+
+SiView 会知道它：
+
+* 做过哪些工序
+* 当前在哪
+* 下一步去哪
+* 是否可以继续
+* 是否被 hold
+* 是否需要量测
+* 是否要走返工路线
+
+⸻
+
+6.2 Route Management：工艺路线管理
+
+晶圆厂最怕的是 lot 走错流程。
+
+SiView 会根据产品和工艺版本控制 route。
+
+例如：
+
+Step 100: Clean
+Step 110: CVD
+Step 120: Lithography
+Step 130: Develop
+Step 140: Etch
+Step 150: Strip
+Step 160: Metrology
+
+SiView 会检查：
+
+* 当前 lot 是否真的到了这个 step
+* 是否允许进入下一步
+* 是否必须先做量测
+* 是否需要工程师确认
+* 是否进入特殊分支
+* 是否走 rework flow
+
+如果 lot 还没量测就想进入下一道关键工序，系统可以不允许。
+
+⸻
+
+6.3 Recipe Management：配方管理
+
+Recipe 是晶圆厂里极其关键的东西。
+
+比如刻蚀 recipe 可能包括：
+
+* RF 功率
+* 气体流量
+* 腔体压力
+* 温度
+* 时间
+* endpoint 参数
+
+SiView 会校验：
+
+校验项	作用
+Product	这个产品能不能用
+Step	当前工序是否匹配
+Tool	这台设备是否允许
+Chamber	这个腔体是否 qualified
+Recipe Version	版本是否正确
+Approval Status	是否经过批准
+Effective Date	是否在有效期
+
+这可以避免“用错 recipe”。
+
+在晶圆厂，用错 recipe 不是小问题。
+轻则返工，重则整批 wafer 报废。
+
+⸻
+
+6.4 Equipment Management：设备管理
+
+SiView 会管理设备状态和资格。
+
+例如某个工序可以跑的设备可能是：
+
+ETCH-01
+ETCH-03
+ETCH-05
+
+但当前状态可能是：
+
+ETCH-01: Available
+ETCH-03: Maintenance
+ETCH-05: Available, but Chamber B not qualified
+
+SiView 会判断：
+
+* 设备是否 online
+* 设备是否 up
+* 是否处于 PM / maintenance
+* 是否 qualified
+* 设备是否允许跑这个产品
+* chamber 是否允许跑这个 step
+* 是否需要先做 qualification run
+* 是否有 alarm 影响
+
+所以它不是简单“派一台空设备”，而是带着大量规则判断。
+
+⸻
+
+6.5 WIP Management：在制品管理
+
+WIP 是晶圆厂运营的关键指标。
+
+SiView 会显示：
+
+* 每个 area 有多少 lot
+* 每个 step 有多少 lot
+* 哪些 lot 等太久
+* 哪些 lot 被 hold
+* 哪些 lot 是 hot lot
+* 哪些 lot 堵在瓶颈设备前
+* 哪些 lot 快要超过 queue time
+* 哪些产品交期有风险
+
+晶圆厂管理者可以通过 WIP 视图判断：
+
+光刻区是不是堵了？
+刻蚀区是不是空闲？
+CMP 是不是瓶颈？
+某个产品是不是快延误？
+某个设备群是否 WIP 堆积？
+
+⸻
+
+6.6 Dispatching：派工
+
+晶圆厂里很多设备前面都排着 lot。
+SiView 或与它集成的 RTD 会决定：
+
+哪一批先跑。
+
+IBM 中国官网提到，RTD 与 SiView MES 预先集成，可以通过基于浏览器的拖拽规则编辑器，让用户几乎不需要编程就能创建业务和运营规则。 
+
+派工规则可能包括：
+
+规则	说明
+FIFO	先到先做
+Priority	优先级高先做
+Hot Lot	急单优先
+Due Date	快到交期优先
+Setup Minimize	减少 recipe 切换
+Batch Rule	炉管、清洗设备凑批
+Tool Dedication	指定设备生产
+Queue Time Limit	防止超过工序间等待限制
+Sampling Need	需要抽检的 lot 特殊处理
+
+先进 Fab 里，dispatch 不是简单排队，而是复杂优化问题。
+
+⸻
+
+6.7 Hold / Release：异常暂停与放行
+
+SiView 里非常重要的概念是 Hold。
+
+Hold 意味着：
+
+这批 lot 暂时不能继续生产。
+
+常见原因：
+
+Hold 类型	原因
+Engineering Hold	工程师需要确认
+Quality Hold	品质异常
+SPC Hold	统计过程异常
+FDC Hold	设备过程异常
+Equipment Hold	设备问题影响
+Reticle Hold	光罩异常
+Material Hold	材料问题
+Metrology Hold	等待量测
+Customer Hold	客户要求
+
+比如：
+
+某台刻蚀机 chamber 出现异常。
+FDC 发现压力曲线异常。
+系统可以把过去几个小时在这个 chamber 跑过的 lot 全部 hold。
+工程师检查后再决定：
+
+* release 放行
+* 加测
+* 返工
+* 报废
+* 降级处理
+
+⸻
+
+6.8 Rework Management：返工管理
+
+晶圆厂不是所有异常都直接报废。
+很多情况可以返工。
+
+例如：
+
+* 光刻失败 → 去胶 → 重新涂胶曝光
+* 膜厚不合格 → 追加刻蚀或 CMP
+* 清洗异常 → 重新清洗
+* 量测不合格 → 进入工程判断流程
+
+SiView 要记录：
+
+* 为什么返工
+* 谁批准返工
+* 返工走了哪些 step
+* 返工了哪些 wafer
+* 返工次数
+* 返工后是否恢复正常路线
+
+这对良率和质量追溯非常重要。
+
+⸻
+
+7. SiView 和 EAP / tMSP 的关系
+
+SiView 不是直接去控制设备内部的每个动作。
+中间通常有设备自动化层。
+
+IBM 中国官网提到，tMSP 是 SiView Standard 提供的制造工具控制应用程序，用于控制设备与 MES 之间的通信，它运行在事件驱动、面向服务的多线程逻辑引擎上，并使用插件支持业务逻辑，同时支持多种常见通信协议的模块。 
+
+可以这样理解：
+
+SiView MES
+负责生产逻辑、lot 状态、工艺规则
+        ↓
+tMSP / EAP
+负责设备通信、事件处理、recipe 选择、数据采集
+        ↓
+SECS/GEM
+半导体设备通信标准
+        ↓
+Tool
+实际工艺设备
+
+例如一个 lot 要进入刻蚀机：
+
+1. SiView 判断 lot 是否可以进入这个 step。
+2. SiView 判断设备是否 qualified。
+3. SiView 确认 recipe。
+4. tMSP / EAP 和设备通信。
+5. 设备确认 FOUP、wafer map、recipe。
+6. 设备开始加工。
+7. 设备上传完成事件和过程数据。
+8. SiView 更新 lot 状态。
+
+⸻
+
+8. SiView 和 AMHS / MCS 的关系
+
+晶圆厂里 FOUP 的搬运通常靠 AMHS，也就是自动物料搬运系统。
+
+关系大概是：
+
+SiView：Lot A 下一步去 ETCH-03
+        ↓
+MCS：生成搬运任务
+        ↓
+AMHS / OHT：天车把 FOUP 搬过去
+        ↓
+Tool Port：FOUP 到达设备
+        ↓
+EAP / SiView：确认并开工
+
+SiView 管的是：
+
+* lot 下一步去哪
+* 是否允许去这台设备
+* 哪个 lot 优先
+* 完成后下一站是什么
+
+AMHS 管的是：
+
+* FOUP 怎么搬
+* 走哪条 OHT 路线
+* 放哪个 stocker
+* 到哪个设备 port
+
+所以：
+
+SiView 管生产逻辑，AMHS 管物理物流。
+
+⸻
+
+9. SiView 和 SPC / APC / FDC 的关系
+
+IBM 官网产品页提到，SiView Standard 相关方案包含 SPC、规格管理器、PDS、RTD、tMSP 等能力，其中 SPC 用于实时监测工艺设备数据趋势，帮助预测缺陷并提升良率。 
+
+可以简单理解为：
+
+系统	作用
+SiView	管 lot 流程和生产执行
+SPC	看量测数据是否失控
+FDC	看设备过程曲线是否异常
+APC	根据数据动态调整工艺参数
+YMS	良率分析
+PDS	生产动态模拟
+RTD	实时调度
+
+典型闭环是：
+
+设备加工完成
+↓
+数据上传
+↓
+SPC / FDC 判断异常
+↓
+SiView 自动 Hold lot
+↓
+工程师处理
+↓
+Release / Rework / Scrap
+
+⸻
+
+10. PDS：生产动态模拟器
+
+IBM 中国官网提到，PDS 是一种离散事件模拟器，可以预测半导体工厂中 lot 的详细流动、工具利用率以及 WIP 快照，用于支持产能规划、WIP 平衡、提高产出、缩短交货时间等决策。 
+
+这个东西很重要。
+
+因为晶圆厂的问题常常不是“某一台设备能不能跑”，而是：
+
+* 整个 Fab 产能是否够
+* 哪个区域会堵
+* 某个产品组合会不会导致瓶颈
+* 如果增加几台设备，产出能提高多少
+* 某个设备 PM 会不会影响交期
+* WIP 怎么平衡
+
+PDS 可以用来做模拟。
+
+⸻
+
+11. SiView 的技术特点：老牌、面向对象、重集成
+
+1999 年 EETimes 报道 IBM 发布 SiView Standard 时，称它是面向半导体制造商的 object-oriented manufacturing execution system，并且符合 SEMATECH CIM Framework 和 OMG 标准。 
+
+这说明它不是简单脚本系统，而是典型的 1990 年代大型企业软件风格：
+
+* 面向对象
+* CIM 框架
+* 标准接口
+* 大型数据库
+* 与第三方系统集成
+* 支持 300mm 晶圆厂自动化
+* 支持复杂生产规则
+
+另有公开资料提到，SiView Standard 是集成的 MES 与设备自动化方案，兼容 SEMI/SEMATECH CIM Framework 和 OMG 标准，使用面向对象技术。 
+
+⸻
+
+12. 技术栈是不是 C++ + Oracle？
+
+这个问题要分开说。
+
+不能简单说 SiView Standard 整个系统就是 C++ + Oracle。
+
+更准确是：
+
+SiView 作为老牌半导体 MES，历史上和 C/C++、Java、SQL、Unix/Linux、DB2/Oracle 这类企业级技术栈关系很深。
+
+原因是：
+
+* 它起源早
+* 属于关键任务系统
+* 要长时间稳定运行
+* 要处理大量 transaction
+* 要与很多设备和系统集成
+* 很多客户现场有大量定制开发
+
+所以你听到的“C++ + Oracle”很可能来自某个项目现场或者某个客户版本。
+
+比较合理的说法是：
+
+核心 MES / 服务端：可能有 C++ / Java 等组件
+数据库：可能使用 DB2 或 Oracle 等关系型数据库
+客户端 / 工具：可能有传统 GUI、Web 工具、批处理工具
+接口层：大量 EAP、SECS/GEM、消息、数据库接口、文件接口
+客制化：不同 Fab 会有大量本地化扩展
+
+大型 MES 不是一个单体小程序，而是一整套平台和模块。
+
+⸻
+
+13. 为什么 SiView 这类系统很难替换？
+
+因为它已经深度嵌入 Fab 的生产现场。
+
+它连接了：
+
+* ERP
+* APS
+* AMHS
+* EAP
+* SPC
+* FDC
+* APC
+* YMS
+* 工程数据库
+* 设备 recipe 系统
+* 报表系统
+* 质量系统
+* 物料系统
+* 光罩管理系统
+* 客户出货系统
+
+而且它里面沉淀了大量工厂规则：
+
+* 每个产品怎么走 route
+* 每个 step 能用哪些设备
+* 每个 recipe 对应哪些产品
+* 每台设备的 qualification
+* 每个 chamber 的限制
+* 每个客户的特殊要求
+* 每个异常的 hold 规则
+* 每个返工流程
+* 每个抽检规则
+
+替换 SiView 不只是换软件，而是重构整座 Fab 的生产控制逻辑。
+
+所以很多晶圆厂宁愿：
+
+保留 SiView 核心
+外围做现代化
+增加 Web 界面
+增加数据平台
+增加 AI / 分析模块
+增加调度优化
+增加 API / 中间层
+
+而不是轻易把核心 MES 整个推翻。
+
+⸻
+
+14. SiView 的一个典型生产场景
+
+假设有一个 lot 要做光刻。
+
+Step 1：Lot 等待
+
+Lot ID: L001
+Product: P2NM_A
+Current Step: LITHO-340
+Status: Waiting
+Carrier: FOUP-8123
+Priority: Normal
+
+SiView 知道它现在该做光刻。
+
+⸻
+
+Step 2：判断设备
+
+SiView 检查：
+
+ASML-01: Available, Qualified
+ASML-02: Maintenance
+ASML-03: Available, but Product Not Qualified
+
+于是只能派到 ASML-01。
+
+⸻
+
+Step 3：检查 reticle
+
+光刻需要 mask / reticle。
+
+SiView 或相关 reticle 管理系统检查：
+
+Reticle: M340_A
+Status: Available
+Clean Status: OK
+Location: Reticle Stocker
+
+⸻
+
+Step 4：检查 recipe
+
+Recipe: LITHO_P2NM_A_340_V7
+Approved: Yes
+Tool: ASML-01 allowed
+Product: P2NM_A allowed
+Step: LITHO-340 allowed
+
+通过。
+
+⸻
+
+Step 5：搬运
+
+FOUP-8123 → ASML-01 Port 2
+Reticle M340_A → ASML-01
+
+AMHS / MCS 执行搬运。
+
+⸻
+
+Step 6：设备加工
+
+EAP / tMSP 和设备通信：
+
+Lot verify
+Carrier verify
+Wafer map verify
+Recipe select
+Remote start
+Process complete
+Data upload
+
+⸻
+
+Step 7：完成后更新
+
+SiView 更新：
+
+LITHO-340 Completed
+Next Step: METRO-341
+Status: Waiting
+
+如果 overlay 量测异常：
+
+Status: Hold
+Reason: Overlay SPC Violation
+
+工程师处理后再决定 release 或 rework。
+
+⸻
+
+15. SiView 的优势
+
+1. 半导体行业专用
+
+不是普通 MES 改造，而是从半导体 Fab 场景长出来的系统。
+
+2. 历史长，成熟稳定
+
+从 1980 年代内部系统到 1998 年商品化，再到今天仍在使用，说明它的行业适配度很深。 
+
+3. 自动化能力强
+
+官方强调它支持全自动单晶圆控制，以及 carrier 内多个 lot 的处理。 
+
+4. 集成能力强
+
+它可以和企业系统、自动化系统、调度、SPC 等系统集成。IBM Research 也把 SiView 描述为行业领先 MES，并提到它可以与企业系统集成，以加强供应链和制造连接。 
+
+5. 适合 24/7 关键任务
+
+晶圆厂是 24 小时 365 天运行，MES 一旦出问题会影响整条生产线。IBM 日本介绍也强调，半导体制造是 mission-critical，生产线大规模且 24/7 运作，SiView 用于管理和控制这种制造流程。 
+
+⸻
+
+16. SiView 的缺点或挑战
+
+虽然它强，但也有典型老牌企业系统的问题。
+
+1. 系统重
+
+SiView 不是轻量系统。
+它部署、升级、定制、测试都很复杂。
+
+2. 学习曲线高
+
+要懂：
+
+* 半导体工艺
+* Fab 生产流程
+* MES 业务
+* lot / wafer / route / recipe
+* 设备自动化
+* 数据库
+* 接口
+* 客户现场规则
+
+不是只会写代码就能马上上手。
+
+3. 客制化多
+
+不同晶圆厂的流程差异很大。
+所以 SiView 项目往往有大量 customization。
+
+4. 替换困难
+
+因为它是核心系统，换 MES 风险极大。
+
+5. 老技术栈压力
+
+老系统可能有：
+
+* C++/Java 旧代码
+* 旧数据库结构
+* 旧客户端
+* 旧接口
+* 复杂批处理
+* 高耦合业务逻辑
+
+所以很多项目会做现代化，但不会轻易推倒重写。
+
+⸻
+
+17. 和其他 MES 相比，SiView 的特点
+
+半导体 MES 市场里还有其他产品，比如 Camstar / Opcenter、Critical Manufacturing、Eyelit、Applied Materials SmartFactory 等。
+
+SiView 的特点是：
+
+维度	SiView Standard
+行业定位	半导体 Fab 专用
+历史	非常老牌
+出身	IBM 半导体制造实践
+强项	复杂 Fab MES、自动化、lot/wafer 控制
+风格	重型企业级系统
+典型客户	大型晶圆厂、先进制造线
+技术感觉	老牌、稳定、复杂、深度定制
+替换难度	很高
+
+⸻
+
+18. 一句话总结
+
+SiView Standard 是 IBM 体系下非常老牌的半导体晶圆厂 MES，起源于日本 IBM 野洲工厂的内部制造系统，后来商品化并在全球 Fab 使用。它负责晶圆厂里 lot、wafer、route、recipe、tool、chamber、WIP、dispatch、hold、rework、自动化接口和生产追溯等核心功能，是晶圆厂生产现场的“大脑”。
+
+IBM、很老、日本人开发、C++、Oracle
+
+可以整理成更准确的说法：
+
+SiView Standard 是 IBM / 日本 IBM 背景很强的半导体 MES，源头可追溯到 1980 年代日本 IBM 野洲工厂。它是老牌大型企业级系统，项目开发和客制化中常见 C++、Java、SQL、DB2/Oracle 等技术栈，但不能简单说整个系统就是纯 C++ + Oracle。
